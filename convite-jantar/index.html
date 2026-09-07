@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convite Especial 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#ffe3ec;
+    --bg-2:#ffd0dd;
+    --card:#fffaf9;
+    --text:#6b2545;
+    --text-soft:#8a4066;
+    --accent:#e0577d;
+    --accent-dark:#c23c63;
+    --gold:#d9a441;
+  }
+  *{ box-sizing:border-box; }
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    overflow-x:hidden;
+  }
+  body{
+    font-family:'Poppins', sans-serif;
+    background:linear-gradient(160deg, var(--bg-1), var(--bg-2));
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:24px;
+  }
+
+  .hearts{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:0;
+  }
+  .heart{
+    position:absolute;
+    bottom:-40px;
+    font-size:22px;
+    opacity:.55;
+    animation:float linear infinite;
+  }
+  @keyframes float{
+    to{ transform:translateY(-110vh) rotate(20deg); opacity:0; }
+  }
+
+  .card{
+    position:relative;
+    z-index:1;
+    background:var(--card);
+    border-radius:28px;
+    padding:44px 34px 38px;
+    max-width:440px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 30px 60px -20px rgba(107,37,69,.35);
+    border:1px solid rgba(224,87,125,.15);
+  }
+
+  .envelope{ font-size:44px; margin-bottom:6px; }
+
+  h1{
+    font-family:'Playfair Display', serif;
+    font-size:1.7rem;
+    margin:0 0 6px;
+    line-height:1.3;
+  }
+
+  .subtitle{
+    font-size:.95rem;
+    color:var(--text-soft);
+    margin-bottom:22px;
+  }
+
+  .details{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    background:linear-gradient(135deg, #fff0f4, #ffe6ee);
+    border-radius:16px;
+    padding:18px 20px;
+    margin-bottom:26px;
+    text-align:left;
+  }
+  .details div{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:.95rem;
+    font-weight:500;
+  }
+  .details span.icon{ font-size:1.2rem; }
+
+  .buttons{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+    min-height:64px;
+    position:relative;
+  }
+
+  button{
+    border:none;
+    border-radius:999px;
+    font-family:'Poppins', sans-serif;
+    font-weight:600;
+    cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease, font-size .25s ease, padding .25s ease;
+  }
+
+  #accept{
+    background:linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color:#fff;
+    padding:14px 26px;
+    font-size:1rem;
+    box-shadow:0 12px 24px -8px rgba(194,60,99,.6);
+  }
+  #accept:hover{ transform:translateY(-2px) scale(1.03); }
+
+  #decline{
+    background:#f1e4e9;
+    color:var(--text-soft);
+    padding:12px 22px;
+    font-size:.9rem;
+    z-index:5;
+  }
+  #decline.dodging{
+    position:fixed;
+  }
+
+  .taunt{
+    min-height:22px;
+    font-size:.85rem;
+    color:var(--text-soft);
+    margin-top:16px;
+    font-style:italic;
+  }
+
+  .escapes{
+    font-size:.75rem;
+    color:#c7a0b3;
+    margin-top:6px;
+  }
+
+  .result{
+    display:none;
+  }
+  .result.show{ display:block; }
+  .card.accepted .prompt{ display:none; }
+  .card.accepted .result{ display:block; }
+
+  .big-heart{ font-size:3rem; margin-bottom:10px; }
+
+  @media (max-width:420px){
+    .card{ padding:34px 22px 30px; }
+    h1{ font-size:1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="card" id="card">
+
+  <div class="prompt">
+    <div class="envelope">💌</div>
+    <h1>Um convite especial para você</h1>
+    <p class="subtitle">Reservei uma noite só nossa. Vem?</p>
+
+    <div class="details">
+      <div><span class="icon">🍽️</span> Jantar a dois</div>
+      <div><span class="icon">🕕</span> Às 18h</div>
+      <div><span class="icon">🏠</span> Na minha casa</div>
+    </div>
+
+    <div class="buttons">
+      <button id="accept">Sim, eu aceito! 💕</button>
+      <button id="decline">Não posso 😢</button>
+    </div>
+
+    <p class="taunt" id="taunt">&nbsp;</p>
+    <p class="escapes" id="escapes"></p>
+  </div>
+
+  <div class="result">
+    <div class="big-heart">💖</div>
+    <h1>Combinado, então!</h1>
+    <p class="subtitle">Te espero às <strong>18h</strong>, na <strong>minha casa</strong>.</p>
+    <p class="subtitle">Vai ser uma noite incrível. Mal posso esperar por você. 🥂</p>
+  </div>
+
+</div>
+
+<script>
+  const acceptBtn = document.getElementById('accept');
+  const declineBtn = document.getElementById('decline');
+  const taunt = document.getElementById('taunt');
+  const escapesEl = document.getElementById('escapes');
+  const card = document.getElementById('card');
+
+  declineBtn.tabIndex = -1;
+  declineBtn.setAttribute('aria-hidden', 'true');
+
+  const taunts = [
+    "Hmm, essa não vou deixar 😏",
+    "Foge não, vem pra cá 🏃‍♀️",
+    "O universo conspira a nosso favor hoje 🌌",
+    "Esse botão é decorativo, sabia? 😂",
+    "Só tem um caminho aqui: o do sim 💕",
+    "Já ia pensando... mas não 😌",
+    "Quase! Mas não mesmo 😏",
+    "Insistente, hein? Eu também sou 😘"
+  ];
+
+  let attempts = 0;
+  let growth = 0;
+
+  function randomPosition(btnRect) {
+    const margin = 16;
+    const maxX = window.innerWidth - btnRect.width - margin;
+    const maxY = window.innerHeight - btnRect.height - margin;
+    const x = Math.max(margin, Math.random() * maxX);
+    const y = Math.max(margin, Math.random() * maxY);
+    return { x, y };
+  }
+
+  function dodge() {
+    declineBtn.classList.add('dodging');
+    const rect = declineBtn.getBoundingClientRect();
+    const { x, y } = randomPosition(rect);
+    declineBtn.style.left = x + 'px';
+    declineBtn.style.top = y + 'px';
+
+    attempts++;
+    taunt.textContent = taunts[Math.min(attempts - 1, taunts.length - 1)];
+    escapesEl.textContent = 'Tentativas de fuga do "não": ' + attempts;
+
+    growth = Math.min(growth + 1, 6);
+    acceptBtn.style.fontSize = (1 + growth * 0.06) + 'rem';
+    acceptBtn.style.padding = (14 + growth * 2) + 'px ' + (26 + growth * 3) + 'px';
+  }
+
+  declineBtn.addEventListener('mouseenter', dodge);
+  declineBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    dodge();
+  }, { passive: false });
+  declineBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    dodge();
+  });
+
+  acceptBtn.addEventListener('click', () => {
+    card.classList.add('accepted');
+    launchConfetti();
+  });
+
+  function launchConfetti() {
+    const emojis = ['💖','✨','🌹','💕','🥂'];
+    for (let i = 0; i < 40; i++) {
+      const el = document.createElement('div');
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.position = 'fixed';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.top = '-40px';
+      el.style.fontSize = (14 + Math.random() * 18) + 'px';
+      el.style.zIndex = 10;
+      el.style.pointerEvents = 'none';
+      el.style.transition = 'transform 2.5s ease-in, opacity 2.5s ease-in';
+      document.body.appendChild(el);
+      requestAnimationFrame(() => {
+        el.style.transform = 'translateY(' + (window.innerHeight + 80) + 'px) rotate(' + (Math.random() * 360) + 'deg)';
+        el.style.opacity = '0';
+      });
+      setTimeout(() => el.remove(), 2600);
+    }
+  }
+
+  const heartsContainer = document.getElementById('hearts');
+  const heartEmojis = ['💗','💕','🌸','💖'];
+  for (let i = 0; i < 18; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.animationDuration = (10 + Math.random() * 12) + 's';
+    h.style.animationDelay = (Math.random() * 12) + 's';
+    h.style.fontSize = (16 + Math.random() * 18) + 'px';
+    heartsContainer.appendChild(h);
+  }
+</script>
+
+</body>
+</html>
