@@ -1,0 +1,1238 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quadro de Estudos 2026.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* =====================================================================
+   QUADRO DE ESTUDOS — estilos
+   Layout: cabeçalho fixo com a semana do quadrimestre, faixa de
+   contagem regressiva das provas, progresso, filtros e o quadro de
+   4 colunas (no celular as colunas viram páginas com rolagem lateral).
+   ===================================================================== */
+:root {
+  /* Cores (tema claro) — neutros levemente azulados, tinta escura */
+  --bg: #EDF0F4;
+  --surface: #FFFFFF;
+  --surface-2: #F5F7FA;
+  --ink: #141B24;
+  --muted: #586474;
+  --line: #D6DCE4;
+  --accent: #1F3A5F;
+  --accent-ink: #FFFFFF;
+  /* Cores semânticas de urgência */
+  --ok: #1B7F4E;
+  --ok-bg: #E2F3E9;
+  --warn: #946A00;
+  --warn-bg: #FAEFCC;
+  --late: #C2342A;
+  --late-bg: #FBE3E0;
+  --shadow: 0 1px 2px rgba(20, 27, 36, .06), 0 3px 10px rgba(20, 27, 36, .05);
+  --overlay: rgba(14, 20, 28, .45);
+  /* Tipografia */
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F141A; --surface: #171E27; --surface-2: #1D2530; --ink: #E5EAF0;
+    --muted: #97A3B3; --line: #2B3542; --accent: #9DBDE8; --accent-ink: #0F141A;
+    --ok: #52C98E; --ok-bg: rgba(82, 201, 142, .14); --warn: #E6B73E; --warn-bg: rgba(230, 183, 62, .14);
+    --late: #FF7D71; --late-bg: rgba(255, 125, 113, .15);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 3px 10px rgba(0, 0, 0, .25); --overlay: rgba(0, 0, 0, .6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F141A; --surface: #171E27; --surface-2: #1D2530; --ink: #E5EAF0;
+  --muted: #97A3B3; --line: #2B3542; --accent: #9DBDE8; --accent-ink: #0F141A;
+  --ok: #52C98E; --ok-bg: rgba(82, 201, 142, .14); --warn: #E6B73E; --warn-bg: rgba(230, 183, 62, .14);
+  --late: #FF7D71; --late-bg: rgba(255, 125, 113, .15);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 3px 10px rgba(0, 0, 0, .25); --overlay: rgba(0, 0, 0, .6);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.45;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+.wrap { max-width: 1440px; margin: 0 auto; padding-inline: 16px; padding-block: 0 48px; }
+
+/* ---------- Cabeçalho ---------- */
+.topo {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.topo-in { max-width: 1440px; margin: 0 auto; padding-inline: 16px; padding-block: 10px; display: flex; align-items: center; gap: 12px; }
+.marca { display: flex; flex-direction: column; min-width: 0; margin-right: auto; }
+.marca h1 { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.1; margin: 0; letter-spacing: -.01em; }
+.marca span { font-family: var(--font-mono); font-size: .75rem; color: var(--muted); letter-spacing: .02em; }
+.acoes-topo { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: var(--radius-sm); padding: 7px 12px; font-size: .875rem; font-weight: 500;
+  white-space: nowrap;
+}
+.btn:hover { border-color: var(--muted); }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.btn-primario { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn-primario:hover { filter: brightness(1.1); border-color: var(--accent); }
+.btn-perigo { color: var(--late); }
+.btn-perigo:hover { border-color: var(--late); }
+.btn-icone { padding: 7px; }
+.btn-txt { display: inline; }
+@media (max-width: 560px) { .btn-txt { display: none; } .btn { padding: 7px 9px; } }
+
+/* ---------- Seções ---------- */
+.secao { margin-top: 20px; }
+.rotulo {
+  font-family: var(--font-mono); font-size: .72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--muted); margin: 0 0 8px; display: flex; align-items: center; gap: 10px;
+}
+.rotulo .lnk { text-transform: none; letter-spacing: 0; font-family: var(--font-body); font-weight: 500; font-size: .8rem; }
+.lnk { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+/* ---------- Contagem regressiva ---------- */
+.contagem { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x proximity; }
+.prova-chip {
+  flex: none; scroll-snap-align: start;
+  display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-items: center;
+  min-width: 190px; max-width: 250px; text-align: left;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 10px 14px; box-shadow: var(--shadow);
+}
+.prova-chip:hover { border-color: var(--muted); }
+.prova-chip.ativa { outline: 2px solid var(--dc); outline-offset: -1px; }
+.prova-chip .dias {
+  grid-row: span 2; font-family: var(--font-mono); font-weight: 600; font-size: 1.9rem; line-height: 1;
+  font-variant-numeric: tabular-nums; text-align: center; min-width: 2.2ch;
+}
+.prova-chip .dias small { display: block; font-size: .65rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+.prova-chip .nome { font-weight: 600; font-size: .9rem; line-height: 1.25; min-width: 0; }
+.prova-chip .info { font-size: .78rem; color: var(--muted); display: flex; align-items: center; gap: 6px; min-width: 0; }
+.prova-chip .info i { width: 8px; height: 8px; border-radius: 50%; background: var(--dc); flex: none; }
+.prova-chip.condicional { box-shadow: none; background: var(--surface-2); border-style: dashed; }
+.prova-chip.sem-data .dias { color: var(--muted); }
+.u-ok { color: var(--ok); } .u-warn { color: var(--warn); } .u-late { color: var(--late); }
+
+/* ---------- Progresso ---------- */
+.progresso { display: grid; grid-template-columns: minmax(220px, 1.2fr) repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.prog {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px;
+  display: flex; flex-direction: column; gap: 6px; min-width: 0;
+}
+.prog-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.prog-cab b { font-weight: 600; font-size: .88rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.prog-cab span { font-family: var(--font-mono); font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.barra { height: 8px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; }
+.barra > div { height: 100%; background: var(--dc, var(--accent)); border-radius: 99px; transition: width .3s ease; }
+.prog.geral .prog-cab b { font-family: var(--font-display); font-size: 1rem; }
+.prog.geral .barra { height: 10px; }
+
+/* ---------- Barra de ferramentas ---------- */
+.ferramentas { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; }
+.filtro {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 5px 12px;
+  font-size: .84rem; display: inline-flex; align-items: center; gap: 7px;
+}
+.filtro i { width: 9px; height: 9px; border-radius: 50%; background: var(--dc, var(--muted)); }
+.filtro[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.ordem { display: flex; align-items: center; gap: 8px; font-size: .84rem; color: var(--muted); }
+.ordem select, .campo input, .campo select, .campo textarea {
+  border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-sm); padding: 7px 10px; min-width: 0;
+}
+
+/* ---------- Quadro ---------- */
+.nav-colunas { display: none; gap: 6px; margin-bottom: 10px; overflow-x: auto; }
+.nav-colunas button { flex: 1 0 auto; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-sm); padding: 6px 10px; font-size: .82rem; }
+.nav-colunas button b { font-family: var(--font-mono); margin-left: 4px; }
+.quadro-wrap { overflow-x: auto; scroll-snap-type: x mandatory; }
+.quadro { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.coluna {
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 10px; min-height: 220px; display: flex; flex-direction: column; gap: 10px; scroll-snap-align: start;
+  transition: border-color .15s, background .15s;
+}
+.coluna.alvo { border-color: var(--accent); border-style: dashed; }
+.coluna-cab { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px; }
+.coluna-cab h2 { font-family: var(--font-display); font-size: 1.02rem; margin: 0; }
+.coluna-cab span { font-family: var(--font-mono); font-size: .8rem; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 99px; padding: 1px 9px; }
+.lista { display: flex; flex-direction: column; gap: 8px; min-height: 40px; }
+.vazio { color: var(--muted); font-size: .84rem; text-align: center; padding: 18px 8px; border: 1px dashed var(--line); border-radius: var(--radius-sm); }
+
+@media (max-width: 900px) {
+  .nav-colunas { display: flex; }
+  .quadro { grid-template-columns: repeat(4, min(86vw, 360px)); }
+}
+
+/* ---------- Card ---------- */
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; box-shadow: var(--shadow);
+  cursor: grab; position: relative;
+}
+.card:hover { border-color: var(--muted); }
+.card.arrastando { opacity: .45; }
+.card.atrasado { border-color: var(--late); background: linear-gradient(var(--late-bg), var(--late-bg)), var(--surface); }
+.card.feito { box-shadow: none; }
+.card.feito .card-titulo { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.card-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.chip-disc {
+  display: inline-flex; align-items: center; gap: 6px; font-size: .74rem; font-weight: 600;
+  padding: 2px 8px 2px 6px; border-radius: 99px; min-width: 0;
+  background: color-mix(in srgb, var(--dc) 14%, transparent); color: var(--ink);
+}
+.chip-disc i { width: 8px; height: 8px; border-radius: 50%; background: var(--dc); flex: none; }
+.chip-disc em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.urg {
+  font-family: var(--font-mono); font-size: .72rem; font-weight: 600; padding: 2px 7px; border-radius: 99px;
+  white-space: nowrap; display: inline-flex; align-items: center; gap: 5px;
+}
+.urg::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.urg.ok { color: var(--ok); background: var(--ok-bg); }
+.urg.warn { color: var(--warn); background: var(--warn-bg); }
+.urg.late { color: var(--late); background: var(--late-bg); }
+.urg.neutro { color: var(--muted); background: var(--surface-2); }
+.urg.neutro::before { display: none; }
+.card-titulo { margin: 0; font-size: .95rem; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; margin: 0; font-size: .78rem; }
+.card-meta dt { color: var(--muted); font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; font-family: var(--font-mono); }
+.card-meta dd { margin: 0; font-variant-numeric: tabular-nums; }
+.card-pe { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 28px; }
+.mini { display: flex; align-items: center; gap: 10px; font-size: .76rem; color: var(--muted); font-family: var(--font-mono); }
+.mini span { display: inline-flex; align-items: center; gap: 4px; }
+.mini svg { width: 14px; height: 14px; }
+.mover { display: flex; gap: 4px; }
+.mover button { border: 1px solid var(--line); background: var(--surface-2); border-radius: var(--radius-sm); width: 30px; height: 28px; display: grid; place-items: center; padding: 0; }
+.mover button:hover:not(:disabled) { border-color: var(--muted); }
+.mover button:disabled { opacity: .35; cursor: default; }
+.mover svg { width: 15px; height: 15px; }
+
+/* ---------- Diálogos ---------- */
+dialog {
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink);
+  padding: 0; width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); box-shadow: 0 20px 50px rgba(0, 0, 0, .25);
+}
+dialog.largo { width: min(760px, calc(100vw - 24px)); }
+dialog::backdrop { background: var(--overlay); }
+.dlg { display: flex; flex-direction: column; max-height: calc(100dvh - 34px); }
+.dlg-cab { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.dlg-cab h2 { font-family: var(--font-display); font-size: 1.15rem; margin: 0; }
+.dlg-corpo { padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+.dlg-pe { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; padding: 12px 18px; border-top: 1px solid var(--line); }
+.dlg-pe .esq { margin-right: auto; }
+.campo { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.campo label, .campo .lbl { font-size: .8rem; font-weight: 600; color: var(--muted); }
+.campo textarea { resize: vertical; min-height: 90px; }
+.campo small { color: var(--muted); font-size: .76rem; }
+.grade-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 520px) { .grade-2 { grid-template-columns: 1fr; } }
+
+.checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.checklist li { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: var(--radius-sm); }
+.checklist li:hover { background: var(--surface-2); }
+.checklist input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--accent); flex: none; }
+.checklist input[type="text"] { flex: 1; border: 0; background: transparent; padding: 2px 0; min-width: 0; }
+.checklist li.ok input[type="text"] { text-decoration: line-through; color: var(--muted); }
+.checklist .rm { border: 0; background: none; color: var(--muted); padding: 2px 6px; font-size: 1.1rem; line-height: 1; }
+.checklist .rm:hover { color: var(--late); }
+.add-item { display: flex; gap: 6px; }
+.add-item input { flex: 1; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-sm); padding: 7px 10px; min-width: 0; }
+
+/* Disciplinas */
+.disc-bloco { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.disc-linha { display: grid; grid-template-columns: 44px 1fr 150px auto; gap: 8px; align-items: end; }
+.disc-linha input[type="color"] { width: 44px; height: 36px; padding: 2px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.provas-tab { display: flex; flex-direction: column; gap: 6px; }
+.prova-linha { display: grid; grid-template-columns: 1fr 150px auto auto auto; gap: 6px; align-items: center; }
+.prova-linha input[type="text"], .prova-linha input[type="date"] { border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-sm); padding: 6px 8px; min-width: 0; }
+.prova-linha label { font-size: .78rem; color: var(--muted); display: inline-flex; gap: 4px; align-items: center; white-space: nowrap; }
+.prova-linha .btn { padding: 5px 8px; font-size: .78rem; }
+@media (max-width: 620px) {
+  .disc-linha { grid-template-columns: 44px 1fr; }
+  .disc-linha .campo-cod, .disc-linha .btn { grid-column: span 2; justify-self: start; }
+  .prova-linha { grid-template-columns: 1fr 1fr; }
+}
+
+.backup textarea { width: 100%; min-height: 150px; font-family: var(--font-mono); font-size: .75rem; border: 1px solid var(--line); background: var(--surface-2); border-radius: var(--radius-sm); padding: 8px; }
+.backup h3 { margin: 0; font-size: .95rem; }
+.linha-btns { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.aviso { font-size: .82rem; color: var(--muted); margin: 0; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--bg); padding: 9px 16px; border-radius: 99px; font-size: .86rem; font-weight: 500;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 50; max-width: calc(100vw - 32px);
+}
+.toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<script>
+  /* Aplica o tema salvo antes de desenhar a página (evita "piscar"). */
+  try { var t = localStorage.getItem('quadroEstudos.tema'); if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+
+<!-- Ícones SVG reutilizáveis -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mais" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+  <symbol id="i-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-livro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></symbol>
+  <symbol id="i-disco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-esq" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="i-dir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></symbol>
+  <symbol id="i-nota" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+</svg>
+
+<header class="topo">
+  <div class="topo-in">
+    <div class="marca">
+      <h1>Quadro de Estudos</h1>
+      <span id="semana">UFABC · 2026.3</span>
+    </div>
+    <div class="acoes-topo">
+      <button class="btn btn-primario" id="btn-novo" type="button"><svg><use href="#i-mais"/></svg><span class="btn-txt">Novo card</span></button>
+      <button class="btn" id="btn-disc" type="button" title="Disciplinas e provas"><svg><use href="#i-livro"/></svg><span class="btn-txt">Disciplinas</span></button>
+      <button class="btn" id="btn-backup" type="button" title="Backup"><svg><use href="#i-disco"/></svg><span class="btn-txt">Backup</span></button>
+      <button class="btn btn-icone" id="btn-tema" type="button" aria-label="Alternar modo escuro"><svg><use href="#i-lua"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="secao" aria-labelledby="t-contagem">
+    <h2 class="rotulo" id="t-contagem">Próximas provas <button class="lnk" id="tg-cond" type="button"></button></h2>
+    <div class="contagem" id="contagem"></div>
+  </section>
+
+  <section class="secao" aria-labelledby="t-prog">
+    <h2 class="rotulo" id="t-prog">Progresso</h2>
+    <div class="progresso" id="progresso"></div>
+  </section>
+
+  <section class="secao">
+    <div class="ferramentas">
+      <div class="filtros" id="filtros" role="group" aria-label="Filtrar por disciplina"></div>
+      <label class="ordem" for="sel-ordem">Ordenar por
+        <select id="sel-ordem">
+          <option value="prazo">Prazo sugerido</option>
+          <option value="prova">Data da prova</option>
+        </select>
+      </label>
+    </div>
+  </section>
+
+  <section class="secao">
+    <nav class="nav-colunas" id="nav-colunas" aria-label="Ir para coluna"></nav>
+    <div class="quadro-wrap">
+      <div class="quadro" id="quadro"></div>
+    </div>
+  </section>
+</main>
+
+<!-- Diálogo: criar/editar card -->
+<dialog id="dlg-card">
+  <form class="dlg" id="form-card" method="dialog">
+    <div class="dlg-cab"><h2 id="card-titulo-dlg">Editar card</h2><button class="btn btn-icone" type="button" data-fechar aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+    <div class="dlg-corpo">
+      <div class="campo"><label for="f-titulo">Título do tópico</label><input id="f-titulo" required maxlength="200"></div>
+      <div class="grade-2">
+        <div class="campo"><label for="f-disc">Disciplina</label><select id="f-disc"></select></div>
+        <div class="campo"><label for="f-prova">Prova</label><select id="f-prova"></select></div>
+      </div>
+      <div class="grade-2">
+        <div class="campo"><label for="f-prazo">Prazo sugerido para estudar</label><input type="date" id="f-prazo"></div>
+        <div class="campo"><label for="f-coluna">Coluna</label><select id="f-coluna"></select></div>
+      </div>
+      <div class="campo"><label for="f-aula">Data da aula (opcional)</label><input type="date" id="f-aula"><small>Usada ao redistribuir prazos: o prazo nunca fica antes de 2 dias depois da aula.</small></div>
+      <div class="campo">
+        <span class="lbl">Checklist de subtópicos</span>
+        <ul class="checklist" id="f-checklist"></ul>
+        <div class="add-item"><input id="f-novo-item" placeholder="Adicionar subtópico" aria-label="Novo subtópico"><button class="btn" type="button" id="f-add-item">Adicionar</button></div>
+      </div>
+      <div class="campo"><label for="f-notas">Notas</label><textarea id="f-notas" placeholder="Fórmulas, dúvidas para o atendimento, links de listas…"></textarea></div>
+    </div>
+    <div class="dlg-pe">
+      <button class="btn btn-perigo esq" type="button" id="f-excluir">Excluir</button>
+      <button class="btn" type="button" data-fechar>Cancelar</button>
+      <button class="btn btn-primario" type="submit">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Diálogo: disciplinas e provas -->
+<dialog id="dlg-disc" class="largo">
+  <div class="dlg">
+    <div class="dlg-cab"><h2>Disciplinas e provas</h2><button class="btn btn-icone" type="button" data-fechar aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+    <div class="dlg-corpo" id="disc-corpo"></div>
+    <div class="dlg-pe">
+      <button class="btn esq" type="button" id="btn-add-disc"><svg><use href="#i-mais"/></svg>Nova disciplina</button>
+      <button class="btn btn-primario" type="button" data-fechar>Pronto</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Diálogo: backup -->
+<dialog id="dlg-backup" class="largo">
+  <div class="dlg backup">
+    <div class="dlg-cab"><h2>Backup dos dados</h2><button class="btn btn-icone" type="button" data-fechar aria-label="Fechar"><svg><use href="#i-x"/></svg></button></div>
+    <div class="dlg-corpo">
+      <h3>Exportar</h3>
+      <p class="aviso">Baixe o arquivo JSON ou copie o texto abaixo e guarde em um lugar seguro (Drive, e-mail para você mesmo).</p>
+      <div class="linha-btns">
+        <button class="btn btn-primario" type="button" id="bk-baixar"><svg><use href="#i-disco"/></svg>Baixar .json</button>
+        <button class="btn" type="button" id="bk-copiar">Copiar texto</button>
+      </div>
+      <textarea id="bk-export" readonly aria-label="Dados exportados em JSON"></textarea>
+      <h3>Importar</h3>
+      <p class="aviso">Escolha um arquivo .json de backup ou cole o texto. Isso substitui todos os dados atuais.</p>
+      <div class="linha-btns"><input type="file" id="bk-arquivo" accept="application/json,.json" aria-label="Arquivo de backup"></div>
+      <textarea id="bk-import" placeholder="…ou cole aqui o JSON do backup" aria-label="JSON para importar"></textarea>
+      <div class="linha-btns">
+        <button class="btn btn-primario" type="button" id="bk-importar">Importar</button>
+        <button class="btn btn-perigo" type="button" id="bk-reset">Restaurar plano original</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<!-- Diálogo: confirmação (substitui o confirm() do navegador) -->
+<dialog id="dlg-confirm">
+  <form class="dlg" method="dialog">
+    <div class="dlg-cab"><h2 id="cf-titulo">Confirmar</h2></div>
+    <div class="dlg-corpo"><p id="cf-msg" style="margin:0"></p></div>
+    <div class="dlg-pe">
+      <button class="btn" value="nao">Cancelar</button>
+      <button class="btn btn-primario" value="sim" id="cf-ok">Confirmar</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+/* =====================================================================
+   QUADRO DE ESTUDOS — lógica
+   Tudo roda no navegador. Os dados ficam no localStorage e podem ser
+   exportados/importados em JSON pelo botão "Backup".
+   ===================================================================== */
+
+// ---------- Constantes ----------
+const CHAVE_DADOS = 'quadroEstudos.v1';
+const CHAVE_TEMA = 'quadroEstudos.tema';
+const INICIO_QUADRIMESTRE = '2026-09-14'; // 1ª semana de aulas do 2026.3 (segundo os planos)
+const SEMANAS_QUADRIMESTRE = 12;
+
+const COLUNAS = [
+  { id: 'estudar', nome: 'A estudar' },
+  { id: 'andamento', nome: 'Em andamento' },
+  { id: 'revisar', nome: 'Revisar' },
+  { id: 'concluido', nome: 'Concluído' },
+];
+
+// ---------- Utilidades de data (sempre no formato ISO 'AAAA-MM-DD', em hora local) ----------
+const DIAS_SEMANA = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+function paraData(iso) { const [a, m, d] = iso.split('-').map(Number); return new Date(a, m - 1, d); }
+function paraISO(dt) { return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`; }
+function hojeISO() { return paraISO(new Date()); }
+function somarDias(iso, n) { const d = paraData(iso); d.setDate(d.getDate() + n); return paraISO(d); }
+/** Dias de "de" até "ate" (positivo se "ate" é depois). */
+function diasEntre(de, ate) { return Math.round((paraData(ate) - paraData(de)) / 864e5); }
+function maxISO(a, b) { return a > b ? a : b; } // strings ISO comparam corretamente em ordem alfabética
+function minISO(a, b) { return a < b ? a : b; }
+function fmtCurta(iso) { if (!iso) return '—'; const [, m, d] = iso.split('-'); return `${d}/${m}`; }
+function fmtLonga(iso) { return iso ? `${DIAS_SEMANA[paraData(iso).getDay()]} ${fmtCurta(iso)}` : 'a definir'; }
+
+// ---------- Utilidades gerais ----------
+function uid() { return Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3); }
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+const $ = sel => document.querySelector(sel);
+
+/* =====================================================================
+   DISTRIBUIÇÃO DOS PRAZOS SUGERIDOS
+   ---------------------------------------------------------------------
+   Para cada prova com data, os tópicos ("bloco") que ela cobre são
+   ordenados na ordem do plano de ensino (campo `ordem`). Como o plano
+   segue a ordem das dependências (ex.: corpo negro → fotoelétrico →
+   Bohr → dualidade → postulados), os tópicos de base vêm primeiro e
+   recebem os prazos mais cedo; os que dependem deles ficam mais tarde.
+
+   1. Janela de estudo:
+        início = o mais tarde entre HOJE e a data da 1ª aula do bloco
+                 (não adianta "estudar" P2 antes de a matéria começar);
+        fim    = 2 dias antes da prova (reserva os 2 últimos dias para
+                 revisão geral e exercícios de provas antigas).
+   2. A janela é dividida proporcionalmente ao PESO de cada tópico
+      (1 = normal; 1,5 = tópico com muita conta/conceito; 0,7 = leve).
+      O prazo do tópico i cai em:
+        início + (fim − início) × (soma dos pesos até i) / (peso total)
+      Assim o último tópico termina exatamente no "fim".
+   3. Ajuste pela aula: se o tópico tem data de aula, o prazo nunca fica
+      antes de aula + 2 dias (tempo de assistir, refazer exemplos e
+      fazer a lista).
+   4. Os prazos nunca diminuem ao longo do bloco e nunca passam da
+      véspera da prova.
+   Cards já concluídos não entram na conta. Por padrão só preenche
+   cards SEM prazo; o botão "Redistribuir prazos" sobrescreve todos.
+   ===================================================================== */
+function distribuirPrazos(dados, provaId, sobrescrever = false) {
+  const prova = dados.provas.find(p => p.id === provaId);
+  if (!prova || !prova.data) return 0;
+  const bloco = dados.cards
+    .filter(c => c.provaId === provaId && c.coluna !== 'concluido')
+    .sort((a, b) => a.ordem - b.ordem);
+  if (!bloco.length) return 0;
+
+  const hoje = hojeISO();
+  const aulas = bloco.map(c => c.aula).filter(Boolean).sort();
+  const inicio = maxISO(hoje, aulas[0] || hoje);
+  const vespera = somarDias(prova.data, -1);
+  let fim = somarDias(prova.data, -2);
+  if (fim < inicio) fim = inicio;
+  const janela = diasEntre(inicio, fim);
+  const pesoTotal = bloco.reduce((s, c) => s + (c.peso || 1), 0);
+
+  let acumulado = 0, anterior = inicio, alterados = 0;
+  for (const c of bloco) {
+    acumulado += c.peso || 1;
+    let prazo = somarDias(inicio, Math.round(janela * acumulado / pesoTotal));
+    if (c.aula) prazo = maxISO(prazo, somarDias(c.aula, 2));
+    prazo = minISO(maxISO(prazo, anterior), vespera);
+    anterior = prazo;
+    if (sobrescrever || !c.prazo) { c.prazo = prazo; alterados++; }
+  }
+  return alterados;
+}
+
+/* =====================================================================
+   DADOS INICIAIS — extraídos dos planos de ensino 2026.3
+   - Física Quântica: datas e conteúdo de P1/P2 estão no plano.
+   - Bioquímica: datas das avaliações estão no cronograma; o conteúdo
+     de cada avaliação foi deduzido pela ordem do cronograma (tudo antes
+     da 1ª avaliação cai na P1, o resto na P2).
+   - Programação Estruturada: o plano diz "Prova 1" na semana 4 e
+     "Prova 2" na semana 10, mas as datas estão "a definir" → ficam
+     vazias até você preencher em "Disciplinas".
+   `aula` = data em que o tópico é dado; `peso` = tamanho relativo.
+   ===================================================================== */
+function criarDadosIniciais() {
+  const D = { versao: 1, disciplinas: [], provas: [], cards: [] };
+  let ordem = 0;
+
+  function disciplina(nome, codigo, cor) {
+    const d = { id: uid(), nome, codigo, cor };
+    D.disciplinas.push(d);
+    return d.id;
+  }
+  function prova(discId, nome, data, condicional = false) {
+    const p = { id: uid(), disciplinaId: discId, nome, data, condicional };
+    D.provas.push(p);
+    return p.id;
+  }
+  function card(discId, provaId, titulo, aula, peso, itens, notas = '') {
+    D.cards.push({
+      id: uid(), titulo, disciplinaId: discId, provaId, coluna: 'estudar',
+      prazo: null, aula, peso, notas, ordem: ordem++,
+      checklist: itens.map(t => ({ id: uid(), texto: t, feito: false })),
+    });
+  }
+
+  // ----- Física Quântica (BCK0103-15) -----
+  const fq = disciplina('Física Quântica', 'BCK0103-15', '#6C4CF0');
+  const fqP1 = prova(fq, 'P1', '2026-10-19');
+  const fqP2 = prova(fq, 'P2', '2026-11-30');
+  prova(fq, 'Psub', '2026-12-03', true);
+  prova(fq, 'Prec', '2026-12-14', true);
+  const nP1 = 'Cai na P1 (aulas 01 a 05). Livro-texto: Tipler & Llewellyn, Física Moderna.';
+  const nP2 = 'Cai na P2 (aulas 06 a 12). Livro-texto: Tipler & Llewellyn, Física Moderna.';
+  card(fq, fqP1, 'Radiação do corpo negro', '2026-09-17', 1,
+    ['Lei de Stefan-Boltzmann', 'Lei do deslocamento de Wien', 'Rayleigh-Jeans e a catástrofe do ultravioleta', 'Hipótese de Planck (E = hf)'], 'Aula 01. ' + nP1);
+  card(fq, fqP1, 'Efeitos fotoelétrico e Compton', '2026-09-21', 1,
+    ['Função trabalho e potencial de corte', 'Equação de Einstein do efeito fotoelétrico', 'Deslocamento Compton (Δλ)', 'Momento do fóton'], 'Aula 02. ' + nP1);
+  card(fq, fqP1, 'Espectros atômicos, modelo de Bohr e ondas de De Broglie', '2026-10-01', 1.2,
+    ['Séries espectrais e constante de Rydberg', 'Modelos atômicos até Bohr', 'Postulados de Bohr e níveis do hidrogênio', 'Hipótese de De Broglie (λ = h/p)'], 'Aula 03. ' + nP1);
+  card(fq, fqP1, 'Dualidade onda-partícula e incerteza de Heisenberg', '2026-10-08', 1,
+    ['Evidências experimentais da dualidade', 'Princípio da complementaridade', 'Incerteza posição-momento (Δx·Δp ≥ ħ/2)', 'Incerteza energia-tempo'], 'Aula 04. ' + nP1);
+  card(fq, fqP1, 'Postulados da Física Quântica e funções de onda', '2026-10-15', 1,
+    ['Postulados e estados quânticos', 'Variáveis discretas e contínuas', 'Função de onda e probabilidade (|ψ|²)', 'Interpretações da Física Quântica'], 'Aula 05. ' + nP1);
+  card(fq, fqP2, 'Equação de Schrödinger e funções de onda', '2026-10-22', 1.2,
+    ['Determinação heurística da equação', 'Equação independente do tempo', 'Propriedades da função de onda e normalização'], 'Aula 06. ' + nP2);
+  card(fq, fqP2, 'Poços de potencial infinito e finito; superposição e emaranhamento', '2026-10-29', 1.2,
+    ['Poço infinito: energias e funções de onda', 'Poço finito', 'Transição e superposição de estados', 'Emaranhamento e o gato de Schrödinger'], 'Aula 07. ' + nP2);
+  card(fq, fqP2, 'Oscilador harmônico quântico, operadores e valores médios', '2026-11-05', 1,
+    ['Níveis de energia do oscilador', 'Operadores e valores esperados', 'Armadilhas de íons e computação quântica'], 'Aula 08. ' + nP2);
+  card(fq, fqP2, 'Degraus, barreiras e tunelamento quântico', '2026-11-12', 1.2,
+    ['Degrau de potencial (E > V₀ e E < V₀)', 'Normalização de ondas não confinadas', 'Coeficientes de reflexão e transmissão', 'Tunelamento e microscopia de tunelamento'], 'Aula 09. ' + nP2);
+  card(fq, fqP2, 'Schrödinger em 3D (parte 1): cubo quântico e átomo de hidrogênio', '2026-11-16', 1,
+    ['Cubo quântico e degenerescência', 'Átomo de H em coordenadas esféricas', 'Separação de variáveis', 'Quantização do momento angular e da energia'], 'Aula 10. ' + nP2);
+  card(fq, fqP2, 'Schrödinger em 3D (parte 2): orbitais e números quânticos', '2026-11-19', 1,
+    ['Funções de onda do hidrogênio', 'Orbitais atômicos', 'Significado físico de n, l e m'], 'Aula 11. ' + nP2);
+  card(fq, fqP2, 'Átomos de muitos elétrons: spin, Pauli e tabela periódica', '2026-11-26', 0.8,
+    ['Spin (quarto número quântico)', 'Princípio de exclusão de Pauli', 'Tabela periódica', 'Moléculas'], 'Aula 12 (fechamento do conteúdo). ' + nP2);
+  card(fq, null, 'Atividades on-line do Moodle (Ats)', null, 1,
+    [], 'Valem 10% da média final. Os prazos estão no Moodle e não são prorrogados. Confira lá e anote as datas aqui.');
+
+  // ----- Bioquímica (BCL0308-15) -----
+  const bq = disciplina('Bioquímica', 'BCL0308-15', '#D23F86');
+  const bqP1 = prova(bq, 'Avaliação 1', '2026-10-30');
+  const bqLab = prova(bq, 'Avaliação de laboratório', '2026-12-02');
+  const bqP2 = prova(bq, 'Avaliação 2', '2026-12-07');
+  prova(bq, 'Substitutiva prática', '2026-12-09', true);
+  prova(bq, 'Substitutiva teoria', '2026-12-11', true);
+  prova(bq, 'Exame', '2026-12-16', true);
+  const nBio = ' Use as listas do BioBlocks (link no Moodle).';
+  card(bq, bqP1, 'Introdução à Bioquímica, água e interações intermoleculares', '2026-09-18', 1,
+    ['Estrutura e polaridade da água', 'Ligações de hidrogênio', 'Interações intermoleculares', 'Solubilidade'], 'Aulas de 14/09 e 18/09.' + nBio);
+  card(bq, bqP1, 'pH, ácidos, bases e sistemas tampão', '2026-09-25', 1.5,
+    ['Escala de pH', 'Ka e pKa', 'Equação de Henderson-Hasselbalch', 'Tampões biológicos'], 'Aula de 25/09.' + nBio);
+  card(bq, bqP1, 'Aminoácidos, peptídeos e proteínas', '2026-09-28', 1.5,
+    ['Estrutura e classificação dos aminoácidos', 'Propriedades ácido-base e ponto isoelétrico', 'Ligação peptídica', 'Níveis estruturais das proteínas'], 'Aula de 28/09.' + nBio);
+  card(bq, bqP1, 'Proteínas globulares e relação estrutura-atividade', '2026-10-09', 1,
+    ['Proteínas globulares e fibrosas', 'Relação entre estrutura e atividade', 'Desnaturação'], 'Aula de 09/10.' + nBio);
+  card(bq, bqP1, 'Introdução às enzimas', '2026-10-16', 1,
+    ['Conceito e estrutura das enzimas', 'Sítio ativo', 'Papel catalítico e energia de ativação'], 'Aula de 16/10.' + nBio);
+  card(bq, bqP1, 'Cinética enzimática', '2026-10-26', 1.5,
+    ['Equação de Michaelis-Menten', 'Km e Vmax', 'Gráfico de Lineweaver-Burk', 'Inibição enzimática'], 'Aula de 26/10, 4 dias antes da avaliação.' + nBio);
+  card(bq, bqP2, 'Lipídeos: estrutura, propriedades, funções e agregados', '2026-11-06', 1,
+    ['Estrutura e classificação', 'Propriedades e funções', 'Transformações', 'Agregados lipídicos'], 'Aula de 06/11.' + nBio);
+  card(bq, bqP2, 'Micelas, lipossomos e membranas biológicas', '2026-11-09', 1,
+    ['Micelas e lipossomos', 'Bicamada lipídica', 'Membranas biológicas'], 'Aula de 09/11.' + nBio);
+  card(bq, bqP2, 'Carboidratos: propriedades, funções e transformações', '2026-11-13', 1.2,
+    ['Monossacarídeos', 'Dissacarídeos e polissacarídeos', 'Propriedades e funções'], 'Aula de 13/11.' + nBio);
+  card(bq, bqP2, 'Glicoproteínas, peptidoglicanos e glicoconjugados', '2026-11-23', 1,
+    ['Glicoproteínas', 'Peptidoglicanos', 'Glicoconjugados'], 'Aula de 23/11.' + nBio);
+  card(bq, bqP2, 'Bases nitrogenadas', '2026-11-27', 1,
+    ['Purinas e pirimidinas', 'Nucleosídeos e nucleotídeos', 'Propriedades e transformações'], 'Aula de 27/11.' + nBio);
+  card(bq, bqP2, 'Ácidos nucleicos: DNA, RNA e processos informacionais', '2026-12-04', 1,
+    ['Estrutura do DNA e do RNA', 'Processos informacionais'], 'Aula de 04/12, 3 dias antes da avaliação.' + nBio);
+  const nLab = ' Cai na avaliação de laboratório (02/12).';
+  card(bq, bqLab, 'Prática introdutória: uso de micropipetas', '2026-09-16', 0.5, ['Tipos de micropipeta e volumes', 'Técnica de pipetagem'], 'Prática de 16/09 (1ª aula de laboratório).' + nLab);
+  card(bq, bqLab, 'Prática 1: Espectrofotometria', '2026-09-30', 0.7, ['Lei de Lambert-Beer', 'Curva de calibração'], 'Prática de 30/09.' + nLab);
+  card(bq, bqLab, 'Prática 2: Propriedades físico-químicas da água', '2026-10-07', 0.7, ['Estrutura e polaridade da água'], 'Prática de 07/10.' + nLab);
+  card(bq, bqLab, 'Prática 3: Aminoácidos e propriedades ácido-base', '2026-10-14', 0.7, ['Curva de titulação', 'pKa e ponto isoelétrico'], 'Prática de 14/10.' + nLab);
+  card(bq, bqLab, 'Prática 4: Desnaturação proteica e atividade enzimática', '2026-11-04', 0.7, [], 'Prática de 04/11.' + nLab);
+  card(bq, bqLab, 'Prática 5: Surfactantes e lipídeos', '2026-11-11', 0.7, [], 'Prática de 11/11.' + nLab);
+  card(bq, bqLab, 'Prática 6: Carboidratos', '2026-11-18', 0.7, [], 'Prática de 18/11.' + nLab);
+
+  // ----- Programação Estruturada (MCTA028-15) -----
+  const pe = disciplina('Programação Estruturada', 'MCTA028-15', '#1F7AE0');
+  const peP1 = prova(pe, 'P1', null);
+  const peP2 = prova(pe, 'P2', null);
+  prova(pe, 'Sub', null, true);
+  prova(pe, 'Rec', null, true);
+  const nProg = ' Prova no Moodle com Safe Exam Browser: sem IDE e sem internet. Treine escrever código sem autocompletar.';
+  card(pe, peP1, 'Introdução ao C: variáveis e estruturas de seleção', null, 1,
+    ['Tipos e variáveis', 'printf e scanf', 'if / else e switch'], 'Semana 1. P1 vale 40%.' + nProg);
+  card(pe, peP1, 'Estruturas de repetição, vetores e funções', null, 1.2,
+    ['for, while e do-while', 'Vetores', 'Funções e passagem de parâmetros'], 'Semana 1. P1 vale 40%.' + nProg);
+  card(pe, peP1, 'Matrizes e strings', null, 1,
+    ['Matrizes', 'Strings e string.h'], 'Semana 2. P1 vale 40%.' + nProg);
+  card(pe, peP1, 'Recursão', null, 1.2,
+    ['Caso base e chamada recursiva', 'Pilha de chamadas', 'Exemplos clássicos (fatorial, Fibonacci)'], 'Semana 3. P1 vale 40%.' + nProg);
+  card(pe, peP2, 'Ponteiros', null, 1.2,
+    ['Operadores & e *', 'Aritmética de ponteiros', 'Passagem por referência'], 'Semana 4. P2 vale 60%.' + nProg);
+  card(pe, peP2, 'Alocação estática x dinâmica de vetores', null, 1,
+    ['malloc, calloc e free', 'realloc', 'Vazamento de memória'], 'Semana 5. P2 vale 60%.' + nProg);
+  card(pe, peP2, 'Alocação dinâmica de matrizes', null, 1,
+    ['Vetor de ponteiros', 'Alocar e liberar linha a linha'], 'Semana 6. P2 vale 60%.' + nProg);
+  card(pe, peP2, 'Estruturas (struct) e arquivos', null, 1.2,
+    ['struct e typedef', 'Vetores de struct', 'fopen, fprintf, fscanf e fclose'], 'Semana 7. P2 vale 60%.' + nProg);
+  card(pe, peP2, 'Listas encadeadas', null, 1.5,
+    ['Estrutura do nó', 'Inserção e remoção', 'Percorrer e liberar a lista'], 'Semana 9. P2 vale 60%.' + nProg);
+
+  // Aplica a distribuição de prazos para todas as provas com data
+  D.provas.forEach(p => distribuirPrazos(D, p.id));
+  return D;
+}
+
+// ---------- Estado e persistência ----------
+let dados = carregar();
+const prefs = Object.assign({ filtro: 'todas', ordem: 'prazo', mostrarCond: false }, lerJSON('quadroEstudos.prefs') || {});
+
+function lerJSON(chave) { try { const t = localStorage.getItem(chave); return t ? JSON.parse(t) : null; } catch (e) { return null; } }
+function gravar(chave, valor) { try { localStorage.setItem(chave, typeof valor === 'string' ? valor : JSON.stringify(valor)); } catch (e) { /* armazenamento indisponível: segue só em memória */ } }
+
+function carregar() {
+  const salvo = lerJSON(CHAVE_DADOS);
+  return dadosValidos(salvo) ? salvo : criarDadosIniciais();
+}
+function salvar() { gravar(CHAVE_DADOS, dados); }
+function salvarPrefs() { gravar('quadroEstudos.prefs', prefs); }
+function dadosValidos(d) { return d && Array.isArray(d.disciplinas) && Array.isArray(d.provas) && Array.isArray(d.cards); }
+
+// Buscas rápidas
+const discPorId = id => dados.disciplinas.find(d => d.id === id);
+const provaPorId = id => dados.provas.find(p => p.id === id);
+
+// ---------- Urgência ----------
+/* Regra: usa o prazo sugerido do card; se não houver, a data da prova.
+   > 14 dias = verde · 7 a 14 = amarelo · < 7 ou atrasado = vermelho. */
+function urgencia(card) {
+  if (card.coluna === 'concluido') return { classe: 'neutro', texto: 'Concluído', atrasado: false };
+  const prova = provaPorId(card.provaId);
+  const ref = card.prazo || (prova && prova.data);
+  if (!ref) return { classe: 'neutro', texto: 'Sem data', atrasado: false };
+  const d = diasEntre(hojeISO(), ref);
+  const classe = d > 14 ? 'ok' : d >= 7 ? 'warn' : 'late';
+  const texto = d < 0 ? `Atrasado ${-d} d` : d === 0 ? 'Hoje' : d === 1 ? 'Amanhã' : `${d} dias`;
+  return { classe, texto, atrasado: d < 0 };
+}
+function classeDias(d) { return d > 14 ? 'u-ok' : d >= 7 ? 'u-warn' : 'u-late'; }
+
+/* =====================================================================
+   RENDERIZAÇÃO
+   ===================================================================== */
+function render() {
+  renderSemana();
+  renderContagem();
+  renderProgresso();
+  renderFiltros();
+  renderQuadro();
+}
+
+function renderSemana() {
+  const d = diasEntre(INICIO_QUADRIMESTRE, hojeISO());
+  const semana = Math.floor(d / 7) + 1;
+  let txt = 'UFABC · 2026.3';
+  if (d < 0) txt += ' · antes das aulas';
+  else if (semana <= SEMANAS_QUADRIMESTRE) txt += ` · semana ${semana} de ${SEMANAS_QUADRIMESTRE}`;
+  else txt += ' · período de sub/rec';
+  $('#semana').textContent = txt;
+}
+
+function renderContagem() {
+  const hoje = hojeISO();
+  const lista = dados.provas
+    .filter(p => discPorId(p.disciplinaId))
+    .filter(p => prefs.mostrarCond || !p.condicional)
+    .filter(p => !p.data || p.data >= hoje)
+    .sort((a, b) => (a.data || '9999') < (b.data || '9999') ? -1 : 1);
+  $('#tg-cond').textContent = prefs.mostrarCond ? 'ocultar sub/rec' : 'mostrar sub/rec';
+  if (!lista.length) { $('#contagem').innerHTML = '<p class="aviso">Nenhuma prova futura cadastrada. Adicione datas em "Disciplinas".</p>'; return; }
+  $('#contagem').innerHTML = lista.map(p => {
+    const disc = discPorId(p.disciplinaId);
+    const ativa = prefs.filtro === disc.id ? ' ativa' : '';
+    if (!p.data) {
+      return `<button type="button" class="prova-chip sem-data${p.condicional ? ' condicional' : ''}${ativa}" style="--dc:${esc(disc.cor)}" data-disc="${disc.id}" data-editar-provas title="Clique para definir a data">
+        <span class="dias">?<small>data</small></span><span class="nome">${esc(p.nome)} · a definir</span>
+        <span class="info"><i></i>${esc(disc.nome)}</span></button>`;
+    }
+    const d = diasEntre(hoje, p.data);
+    return `<button type="button" class="prova-chip${p.condicional ? ' condicional' : ''}${ativa}" style="--dc:${esc(disc.cor)}" data-disc="${disc.id}" title="Filtrar por ${esc(disc.nome)}">
+      <span class="dias ${classeDias(d)}">${d === 0 ? 'Hoje' : d}<small>${d === 0 ? '' : d === 1 ? 'dia' : 'dias'}</small></span>
+      <span class="nome">${esc(p.nome)}${p.condicional ? ' (se precisar)' : ''}</span>
+      <span class="info"><i></i>${esc(disc.nome)} · ${fmtLonga(p.data)}</span></button>`;
+  }).join('');
+}
+
+function renderProgresso() {
+  const total = dados.cards.length;
+  const feitos = dados.cards.filter(c => c.coluna === 'concluido').length;
+  const pct = n => (n.total ? Math.round(100 * n.feitos / n.total) : 0);
+  let html = `<div class="prog geral"><div class="prog-cab"><b>Geral</b><span>${feitos}/${total} · ${pct({ feitos, total })}%</span></div>
+    <div class="barra"><div style="width:${pct({ feitos, total })}%"></div></div></div>`;
+  html += dados.disciplinas.map(d => {
+    const cs = dados.cards.filter(c => c.disciplinaId === d.id);
+    const n = { total: cs.length, feitos: cs.filter(c => c.coluna === 'concluido').length };
+    return `<div class="prog" style="--dc:${esc(d.cor)}"><div class="prog-cab"><b title="${esc(d.nome)}">${esc(d.nome)}</b><span>${n.feitos}/${n.total}</span></div>
+      <div class="barra"><div style="width:${pct(n)}%"></div></div></div>`;
+  }).join('');
+  $('#progresso').innerHTML = html;
+}
+
+function renderFiltros() {
+  if (prefs.filtro !== 'todas' && !discPorId(prefs.filtro)) prefs.filtro = 'todas';
+  const botoes = [{ id: 'todas', nome: 'Todas', cor: null }, ...dados.disciplinas];
+  $('#filtros').innerHTML = botoes.map(d =>
+    `<button type="button" class="filtro" data-filtro="${d.id}" aria-pressed="${prefs.filtro === d.id}"${d.cor ? ` style="--dc:${esc(d.cor)}"` : ''}>${d.cor ? '<i></i>' : ''}${esc(d.nome)}</button>`
+  ).join('');
+  $('#sel-ordem').value = prefs.ordem;
+}
+
+function chaveOrdem(card) {
+  if (prefs.ordem === 'prova') { const p = provaPorId(card.provaId); return (p && p.data) || '9999-99-99'; }
+  return card.prazo || '9999-99-99';
+}
+
+function renderQuadro() {
+  const visiveis = dados.cards
+    .filter(c => prefs.filtro === 'todas' || c.disciplinaId === prefs.filtro)
+    .sort((a, b) => { const ka = chaveOrdem(a), kb = chaveOrdem(b); return ka === kb ? a.ordem - b.ordem : ka < kb ? -1 : 1; });
+
+  $('#quadro').innerHTML = COLUNAS.map((col, i) => {
+    const cards = visiveis.filter(c => c.coluna === col.id);
+    return `<section class="coluna" data-coluna="${col.id}" id="col-${col.id}" aria-label="${col.nome}">
+      <div class="coluna-cab"><h2>${col.nome}</h2><span>${cards.length}</span></div>
+      <div class="lista">${cards.length ? cards.map(c => htmlCard(c, i)).join('') : '<div class="vazio">Arraste cards para cá</div>'}</div>
+    </section>`;
+  }).join('');
+
+  $('#nav-colunas').innerHTML = COLUNAS.map(col =>
+    `<button type="button" data-ir="${col.id}">${col.nome}<b>${visiveis.filter(c => c.coluna === col.id).length}</b></button>`
+  ).join('');
+}
+
+function htmlCard(c, idxColuna) {
+  const disc = discPorId(c.disciplinaId) || { nome: 'Sem disciplina', cor: '#888888' };
+  const prova = provaPorId(c.provaId);
+  const u = urgencia(c);
+  const feitos = c.checklist.filter(i => i.feito).length;
+  const provaTxt = prova ? `${esc(prova.nome)} · ${prova.data ? fmtCurta(prova.data) : 'data a definir'}` : 'Sem prova definida';
+  return `<article class="card${u.atrasado ? ' atrasado' : ''}${c.coluna === 'concluido' ? ' feito' : ''}" draggable="true" tabindex="0" data-id="${c.id}" aria-label="${esc(c.titulo)}">
+    <div class="card-topo"><span class="chip-disc" style="--dc:${esc(disc.cor)}"><i></i><em>${esc(disc.nome)}</em></span><span class="urg ${u.classe}">${u.texto}</span></div>
+    <h3 class="card-titulo">${esc(c.titulo)}</h3>
+    <dl class="card-meta"><div><dt>Prova</dt><dd>${provaTxt}</dd></div><div><dt>Estudar até</dt><dd>${c.prazo ? fmtLonga(c.prazo) : '—'}</dd></div></dl>
+    <div class="card-pe">
+      <div class="mini">
+        ${c.checklist.length ? `<span title="Checklist"><svg><use href="#i-check"/></svg>${feitos}/${c.checklist.length}</span>` : ''}
+        ${c.notas.trim() ? '<span title="Tem notas"><svg><use href="#i-nota"/></svg></span>' : ''}
+      </div>
+      <div class="mover">
+        <button type="button" data-mover="-1" aria-label="Mover para ${idxColuna > 0 ? COLUNAS[idxColuna - 1].nome : ''}" ${idxColuna === 0 ? 'disabled' : ''}><svg><use href="#i-esq"/></svg></button>
+        <button type="button" data-mover="1" aria-label="Mover para ${idxColuna < 3 ? COLUNAS[idxColuna + 1].nome : ''}" ${idxColuna === 3 ? 'disabled' : ''}><svg><use href="#i-dir"/></svg></button>
+      </div>
+    </div>
+  </article>`;
+}
+
+// ---------- Ações nos cards ----------
+function moverCard(id, coluna) {
+  const c = dados.cards.find(x => x.id === id);
+  if (!c || c.coluna === coluna) return;
+  c.coluna = coluna;
+  salvar();
+  render();
+  toast(`Movido para "${COLUNAS.find(k => k.id === coluna).nome}"`);
+}
+
+// Clique nos cards, botões de mover, filtros e contagem (delegação de eventos)
+document.addEventListener('click', e => {
+  const mover = e.target.closest('[data-mover]');
+  if (mover) {
+    const card = mover.closest('.card');
+    const c = dados.cards.find(x => x.id === card.dataset.id);
+    const i = COLUNAS.findIndex(k => k.id === c.coluna) + Number(mover.dataset.mover);
+    if (COLUNAS[i]) moverCard(c.id, COLUNAS[i].id);
+    return;
+  }
+  const card = e.target.closest('.card');
+  if (card) { abrirCard(card.dataset.id); return; }
+
+  const filtro = e.target.closest('[data-filtro]');
+  if (filtro) { prefs.filtro = filtro.dataset.filtro; salvarPrefs(); render(); return; }
+
+  const chip = e.target.closest('.prova-chip');
+  if (chip) {
+    if (chip.hasAttribute('data-editar-provas')) { abrirDisciplinas(); return; }
+    prefs.filtro = prefs.filtro === chip.dataset.disc ? 'todas' : chip.dataset.disc;
+    salvarPrefs(); render(); return;
+  }
+
+  const ir = e.target.closest('[data-ir]');
+  if (ir) { document.getElementById('col-' + ir.dataset.ir).scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' }); return; }
+
+  if (e.target.closest('[data-fechar]')) e.target.closest('dialog').close();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('card')) abrirCard(e.target.dataset.id);
+});
+
+$('#tg-cond').addEventListener('click', () => { prefs.mostrarCond = !prefs.mostrarCond; salvarPrefs(); renderContagem(); });
+$('#sel-ordem').addEventListener('change', e => { prefs.ordem = e.target.value; salvarPrefs(); renderQuadro(); });
+
+// ---------- Arrastar e soltar (desktop) ----------
+let arrastandoId = null;
+document.addEventListener('dragstart', e => {
+  const card = e.target.closest && e.target.closest('.card');
+  if (!card) return;
+  arrastandoId = card.dataset.id;
+  card.classList.add('arrastando');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', arrastandoId);
+});
+document.addEventListener('dragend', e => {
+  const card = e.target.closest && e.target.closest('.card');
+  if (card) card.classList.remove('arrastando');
+  document.querySelectorAll('.coluna.alvo').forEach(c => c.classList.remove('alvo'));
+  arrastandoId = null;
+});
+document.addEventListener('dragover', e => {
+  const col = e.target.closest && e.target.closest('.coluna');
+  if (!col || !arrastandoId) return;
+  e.preventDefault();
+  document.querySelectorAll('.coluna.alvo').forEach(c => c !== col && c.classList.remove('alvo'));
+  col.classList.add('alvo');
+});
+document.addEventListener('drop', e => {
+  const col = e.target.closest && e.target.closest('.coluna');
+  if (!col) return;
+  e.preventDefault();
+  const id = e.dataTransfer.getData('text/plain') || arrastandoId;
+  col.classList.remove('alvo');
+  if (id) moverCard(id, col.dataset.coluna);
+});
+
+/* =====================================================================
+   DIÁLOGO DO CARD (criar / editar)
+   ===================================================================== */
+let editando = null;   // cópia do card em edição
+let cardNovo = false;
+
+function preencherProvas(discId, selecionada) {
+  const provas = dados.provas.filter(p => p.disciplinaId === discId);
+  $('#f-prova').innerHTML = '<option value="">Sem prova definida</option>' +
+    provas.map(p => `<option value="${p.id}">${esc(p.nome)} · ${p.data ? fmtCurta(p.data) : 'a definir'}</option>`).join('');
+  $('#f-prova').value = provas.some(p => p.id === selecionada) ? selecionada : '';
+}
+
+function renderChecklist() {
+  $('#f-checklist').innerHTML = editando.checklist.map(i =>
+    `<li class="${i.feito ? 'ok' : ''}" data-item="${i.id}">
+      <input type="checkbox" ${i.feito ? 'checked' : ''} aria-label="Concluir subtópico">
+      <input type="text" value="${esc(i.texto)}" aria-label="Texto do subtópico">
+      <button type="button" class="rm" aria-label="Remover subtópico">×</button></li>`
+  ).join('');
+}
+
+function abrirCard(id) {
+  if (!dados.disciplinas.length) { toast('Crie uma disciplina primeiro'); abrirDisciplinas(); return; }
+  cardNovo = !id;
+  const base = id ? dados.cards.find(c => c.id === id) : {
+    id: uid(), titulo: '', disciplinaId: prefs.filtro !== 'todas' ? prefs.filtro : dados.disciplinas[0].id,
+    provaId: null, coluna: 'estudar', prazo: null, aula: null, peso: 1, notas: '', checklist: [],
+    ordem: dados.cards.reduce((m, c) => Math.max(m, c.ordem), -1) + 1,
+  };
+  editando = JSON.parse(JSON.stringify(base));
+  $('#card-titulo-dlg').textContent = cardNovo ? 'Novo card' : 'Editar card';
+  $('#f-titulo').value = editando.titulo;
+  $('#f-disc').innerHTML = dados.disciplinas.map(d => `<option value="${d.id}">${esc(d.nome)}</option>`).join('');
+  $('#f-disc').value = editando.disciplinaId;
+  preencherProvas(editando.disciplinaId, editando.provaId);
+  $('#f-coluna').innerHTML = COLUNAS.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  $('#f-coluna').value = editando.coluna;
+  $('#f-prazo').value = editando.prazo || '';
+  $('#f-aula').value = editando.aula || '';
+  $('#f-notas').value = editando.notas;
+  $('#f-novo-item').value = '';
+  $('#f-excluir').hidden = cardNovo;
+  renderChecklist();
+  $('#dlg-card').showModal();
+  if (cardNovo) $('#f-titulo').focus();
+}
+
+$('#btn-novo').addEventListener('click', () => abrirCard(null));
+$('#f-disc').addEventListener('change', e => preencherProvas(e.target.value, null));
+
+function adicionarItem() {
+  const t = $('#f-novo-item').value.trim();
+  if (!t) return;
+  editando.checklist.push({ id: uid(), texto: t, feito: false });
+  $('#f-novo-item').value = '';
+  renderChecklist();
+  $('#f-novo-item').focus();
+}
+$('#f-add-item').addEventListener('click', adicionarItem);
+$('#f-novo-item').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); adicionarItem(); } });
+
+$('#f-checklist').addEventListener('input', e => {
+  const li = e.target.closest('[data-item]');
+  const item = editando.checklist.find(i => i.id === li.dataset.item);
+  if (e.target.type === 'checkbox') { item.feito = e.target.checked; li.classList.toggle('ok', item.feito); }
+  else item.texto = e.target.value;
+});
+$('#f-checklist').addEventListener('click', e => {
+  if (!e.target.classList.contains('rm')) return;
+  const li = e.target.closest('[data-item]');
+  editando.checklist = editando.checklist.filter(i => i.id !== li.dataset.item);
+  renderChecklist();
+});
+
+$('#form-card').addEventListener('submit', e => {
+  e.preventDefault();
+  const titulo = $('#f-titulo').value.trim();
+  if (!titulo) { $('#f-titulo').focus(); return; }
+  Object.assign(editando, {
+    titulo,
+    disciplinaId: $('#f-disc').value,
+    provaId: $('#f-prova').value || null,
+    coluna: $('#f-coluna').value,
+    prazo: $('#f-prazo').value || null,
+    aula: $('#f-aula').value || null,
+    notas: $('#f-notas').value,
+    checklist: editando.checklist.filter(i => i.texto.trim()),
+  });
+  if (cardNovo) dados.cards.push(editando);
+  else dados.cards[dados.cards.findIndex(c => c.id === editando.id)] = editando;
+  salvar();
+  $('#dlg-card').close();
+  render();
+  toast(cardNovo ? 'Card criado' : 'Card salvo');
+});
+
+$('#f-excluir').addEventListener('click', async () => {
+  if (!(await confirmar('Excluir card', `Excluir "${editando.titulo}"? Não dá para desfazer.`, 'Excluir'))) return;
+  dados.cards = dados.cards.filter(c => c.id !== editando.id);
+  salvar();
+  $('#dlg-card').close();
+  render();
+  toast('Card excluído');
+});
+
+/* =====================================================================
+   DIÁLOGO DE DISCIPLINAS E PROVAS
+   As alterações são salvas na hora (cada campo atualiza os dados).
+   ===================================================================== */
+function abrirDisciplinas() { renderDisciplinas(); if (!$('#dlg-disc').open) $('#dlg-disc').showModal(); }
+$('#btn-disc').addEventListener('click', abrirDisciplinas);
+
+function renderDisciplinas() {
+  if (!dados.disciplinas.length) { $('#disc-corpo').innerHTML = '<p class="aviso">Nenhuma disciplina. Clique em "Nova disciplina".</p>'; return; }
+  $('#disc-corpo').innerHTML = `<p class="aviso">Ao definir a data de uma prova, os tópicos dela sem prazo recebem prazos sugeridos automaticamente. "Redistribuir" recalcula todos os prazos dos tópicos não concluídos.</p>` +
+    dados.disciplinas.map(d => {
+      const provas = dados.provas.filter(p => p.disciplinaId === d.id);
+      return `<div class="disc-bloco" data-disc="${d.id}">
+        <div class="disc-linha">
+          <div class="campo"><label for="cor-${d.id}">Cor</label><input type="color" id="cor-${d.id}" data-campo="cor" value="${esc(d.cor)}"></div>
+          <div class="campo"><label for="nome-${d.id}">Disciplina</label><input id="nome-${d.id}" data-campo="nome" value="${esc(d.nome)}" maxlength="80"></div>
+          <div class="campo campo-cod"><label for="cod-${d.id}">Código</label><input id="cod-${d.id}" data-campo="codigo" value="${esc(d.codigo || '')}" maxlength="30"></div>
+          <button type="button" class="btn btn-perigo" data-acao="rm-disc">Excluir</button>
+        </div>
+        <div class="provas-tab">
+          <span class="lbl" style="font-size:.8rem;font-weight:600;color:var(--muted)">Provas</span>
+          ${provas.map(p => `<div class="prova-linha" data-prova="${p.id}">
+              <input type="text" data-pcampo="nome" value="${esc(p.nome)}" aria-label="Nome da prova" maxlength="60">
+              <input type="date" data-pcampo="data" value="${p.data || ''}" aria-label="Data da prova">
+              <label><input type="checkbox" data-pcampo="condicional" ${p.condicional ? 'checked' : ''}>sub/rec</label>
+              <button type="button" class="btn" data-acao="redistribuir" ${p.data ? '' : 'disabled'}>Redistribuir</button>
+              <button type="button" class="btn btn-perigo" data-acao="rm-prova" aria-label="Excluir prova">×</button>
+            </div>`).join('') || '<p class="aviso">Sem provas cadastradas.</p>'}
+          <div><button type="button" class="btn" data-acao="add-prova"><svg><use href="#i-mais"/></svg>Adicionar prova</button></div>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+$('#disc-corpo').addEventListener('change', e => {
+  const bloco = e.target.closest('[data-disc]');
+  if (!bloco) return;
+  const disc = discPorId(bloco.dataset.disc);
+  if (e.target.dataset.campo) {
+    const v = e.target.value.trim();
+    if (e.target.dataset.campo === 'nome' && !v) { e.target.value = disc.nome; return; }
+    disc[e.target.dataset.campo] = v;
+  }
+  const linha = e.target.closest('[data-prova]');
+  if (linha && e.target.dataset.pcampo) {
+    const p = provaPorId(linha.dataset.prova);
+    const campo = e.target.dataset.pcampo;
+    if (campo === 'condicional') p.condicional = e.target.checked;
+    else if (campo === 'data') {
+      p.data = e.target.value || null;
+      const n = distribuirPrazos(dados, p.id, false);
+      if (n) toast(`Prazos sugeridos para ${n} tópico${n > 1 ? 's' : ''}`);
+      linha.querySelector('[data-acao="redistribuir"]').disabled = !p.data;
+    } else p[campo] = e.target.value.trim() || p[campo];
+  }
+  salvar();
+  render();
+});
+
+$('#disc-corpo').addEventListener('click', async e => {
+  const btn = e.target.closest('[data-acao]');
+  if (!btn) return;
+  const bloco = btn.closest('[data-disc]');
+  const disc = discPorId(bloco.dataset.disc);
+  const linha = btn.closest('[data-prova]');
+  const acao = btn.dataset.acao;
+
+  if (acao === 'add-prova') {
+    dados.provas.push({ id: uid(), disciplinaId: disc.id, nome: 'Nova prova', data: null, condicional: false });
+  } else if (acao === 'rm-prova') {
+    const p = provaPorId(linha.dataset.prova);
+    const n = dados.cards.filter(c => c.provaId === p.id).length;
+    if (!(await confirmar('Excluir prova', `Excluir "${p.nome}" de ${disc.nome}?${n ? ` ${n} card(s) ficarão "Sem prova definida".` : ''}`, 'Excluir'))) return;
+    dados.provas = dados.provas.filter(x => x.id !== p.id);
+    dados.cards.forEach(c => { if (c.provaId === p.id) c.provaId = null; });
+  } else if (acao === 'redistribuir') {
+    const p = provaPorId(linha.dataset.prova);
+    if (!(await confirmar('Redistribuir prazos', `Recalcular os prazos de todos os tópicos não concluídos de ${p.nome} (${disc.nome})? Prazos editados à mão serão substituídos.`, 'Redistribuir'))) return;
+    const n = distribuirPrazos(dados, p.id, true);
+    toast(n ? `${n} prazo${n > 1 ? 's' : ''} recalculado${n > 1 ? 's' : ''}` : 'Nenhum tópico pendente nesta prova');
+  } else if (acao === 'rm-disc') {
+    const n = dados.cards.filter(c => c.disciplinaId === disc.id).length;
+    if (!(await confirmar('Excluir disciplina', `Excluir ${disc.nome}, suas provas e ${n} card(s)? Não dá para desfazer.`, 'Excluir tudo'))) return;
+    dados.disciplinas = dados.disciplinas.filter(d => d.id !== disc.id);
+    dados.provas = dados.provas.filter(p => p.disciplinaId !== disc.id);
+    dados.cards = dados.cards.filter(c => c.disciplinaId !== disc.id);
+  }
+  salvar();
+  renderDisciplinas();
+  render();
+});
+
+const CORES_SUGERIDAS = ['#E07A1F', '#159A8C', '#B5452B', '#4A5BD4', '#8A6D1E', '#C03FB8'];
+$('#btn-add-disc').addEventListener('click', () => {
+  const cor = CORES_SUGERIDAS[dados.disciplinas.length % CORES_SUGERIDAS.length];
+  const d = { id: uid(), nome: 'Nova disciplina', codigo: '', cor };
+  dados.disciplinas.push(d);
+  dados.provas.push({ id: uid(), disciplinaId: d.id, nome: 'P1', data: null, condicional: false });
+  salvar();
+  renderDisciplinas();
+  render();
+  const campo = document.getElementById('nome-' + d.id);
+  campo.focus(); campo.select();
+});
+
+/* =====================================================================
+   BACKUP (exportar / importar JSON)
+   ===================================================================== */
+function jsonExport() { return JSON.stringify({ ...dados, exportadoEm: new Date().toISOString() }, null, 2); }
+
+$('#btn-backup').addEventListener('click', () => {
+  $('#bk-export').value = jsonExport();
+  $('#bk-import').value = '';
+  $('#bk-arquivo').value = '';
+  $('#dlg-backup').showModal();
+});
+
+$('#bk-baixar').addEventListener('click', () => {
+  const blob = new Blob([jsonExport()], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `quadro-estudos-${hojeISO()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  toast('Download iniciado. Se nada baixar, use "Copiar texto".');
+});
+
+$('#bk-copiar').addEventListener('click', () => {
+  const ta = $('#bk-export');
+  const fallback = () => { ta.focus(); ta.select(); toast('Texto selecionado: copie com Ctrl+C'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(() => toast('Backup copiado'), fallback);
+  } else fallback();
+});
+
+$('#bk-arquivo').addEventListener('change', e => {
+  const arq = e.target.files[0];
+  if (!arq) return;
+  const leitor = new FileReader();
+  leitor.onload = () => { $('#bk-import').value = leitor.result; toast('Arquivo carregado. Clique em "Importar".'); };
+  leitor.readAsText(arq);
+});
+
+$('#bk-importar').addEventListener('click', async () => {
+  let novo;
+  try { novo = JSON.parse($('#bk-import').value); } catch (err) { toast('JSON inválido: confira se colou o backup inteiro'); return; }
+  if (!dadosValidos(novo)) { toast('Esse arquivo não é um backup do Quadro de Estudos'); return; }
+  if (!(await confirmar('Importar backup', `Substituir os dados atuais por ${novo.cards.length} cards e ${novo.disciplinas.length} disciplinas do backup?`, 'Importar'))) return;
+  delete novo.exportadoEm;
+  // Garante campos obrigatórios em backups antigos ou editados à mão
+  novo.cards.forEach((c, i) => {
+    c.id = c.id || uid(); c.checklist = Array.isArray(c.checklist) ? c.checklist : []; c.notas = c.notas || '';
+    c.ordem = typeof c.ordem === 'number' ? c.ordem : i;
+    if (!COLUNAS.some(k => k.id === c.coluna)) c.coluna = 'estudar';
+  });
+  dados = novo;
+  salvar();
+  $('#dlg-backup').close();
+  render();
+  toast('Backup importado');
+});
+
+$('#bk-reset').addEventListener('click', async () => {
+  if (!(await confirmar('Restaurar plano original', 'Apagar tudo e recriar os cards a partir dos planos de ensino, com prazos recalculados a partir de hoje? Faça um backup antes, se quiser guardar o progresso.', 'Restaurar'))) return;
+  dados = criarDadosIniciais();
+  salvar();
+  $('#dlg-backup').close();
+  render();
+  toast('Plano original restaurado');
+});
+
+// ---------- Confirmação dentro da página ----------
+function confirmar(titulo, msg, rotuloOk = 'Confirmar') {
+  return new Promise(resolve => {
+    const dlg = $('#dlg-confirm');
+    $('#cf-titulo').textContent = titulo;
+    $('#cf-msg').textContent = msg;
+    $('#cf-ok').textContent = rotuloOk;
+    dlg.returnValue = '';
+    dlg.addEventListener('close', () => resolve(dlg.returnValue === 'sim'), { once: true });
+    dlg.showModal();
+  });
+}
+
+// ---------- Aviso rápido (toast) ----------
+let tempoToast;
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(tempoToast);
+  tempoToast = setTimeout(() => t.classList.remove('on'), 2600);
+}
+
+// ---------- Modo escuro (lembra a preferência) ----------
+function temaEfetivo() {
+  const attr = document.documentElement.getAttribute('data-theme');
+  if (attr) return attr;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+function atualizarIconeTema() {
+  const escuro = temaEfetivo() === 'dark';
+  $('#btn-tema use').setAttribute('href', escuro ? '#i-sol' : '#i-lua');
+  $('#btn-tema').setAttribute('aria-label', escuro ? 'Usar modo claro' : 'Usar modo escuro');
+}
+$('#btn-tema').addEventListener('click', () => {
+  const novo = temaEfetivo() === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', novo);
+  gravar(CHAVE_TEMA, novo);
+  atualizarIconeTema();
+});
+
+// Fechar diálogo clicando fora dele
+document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d && d.id !== 'dlg-confirm') d.close(); }));
+
+// Atualiza contagens à meia-noite (se a aba ficar aberta)
+setInterval(() => { if (renderSemana.ultimo !== hojeISO()) { renderSemana.ultimo = hojeISO(); render(); } }, 60000);
+renderSemana.ultimo = hojeISO();
+
+// ---------- Início ----------
+salvar();
+atualizarIconeTema();
+render();
+</script>
+</body>
+</html>
