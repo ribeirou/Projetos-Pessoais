@@ -4,6 +4,8 @@
 >
 > **Atualização (13/10, à tarde):** você disse que não quer seguir em CX. O Bootcamp Reclame AQUI saiu das prioridades e virou opcional. O tempo dele foi para AWS e para um projeto técnico de engenharia de dados.
 >
+> **Atualização (13/10, noite):** entraram inglês (EF SET e provas pagas), mais cursos gratuitos de dados (Kaggle Learn, Data Engineering Zoomcamp, CS50 SQL e outros), hackathons online e um bloco "Depois de janeiro de 2027". Foram descartados SuperGeeks e o Code in Place como aluno.
+>
 > **Como ler a confiança dos dados:** o acesso direto aos sites oficiais (aws.amazon.com, learn.microsoft.com, kaggle.com, devpost.com, sympla.com.br, gdg.community.dev etc.) foi **bloqueado pela política de rede do ambiente** em que esta curadoria rodou. Por isso, as datas e os preços foram confirmados por **buscas que trazem o texto das páginas oficiais**, cruzados com notícias. Onde só havia fonte de terceiros, ou as fontes divergiam, está escrito **"não confirmado"** com o motivo. Confira no link oficial antes de pagar ou se inscrever.
 >
 > **Seu calendário (do Quadro de Estudos):** P1 de Física Quântica em **19/10**, Avaliação 1 de Bioquímica em **30/10**, P2 de Física Quântica em **30/11**, Avaliação de laboratório em **02/12**, Avaliação 2 de Bioquímica em **07/12**, substitutivas e exames até **16/12**. O plano abaixo evita carga extra nessas semanas.
@@ -17,7 +19,7 @@
 | 1 | **Começar o AWS Cloud Practitioner Essentials no Skill Builder** (gratuito, cerca de 6h) | Sem prazo | É o primeiro passo da sua meta AWS. Dá para fazer em blocos de 1h depois da P1 de 19/10. |
 | 2 | **Tirar o badge Databricks Fundamentals** (gratuito, cerca de 1,5h com quiz) | Sem prazo | É uma vitória rápida para o LinkedIn: uma credencial de lakehouse reconhecida no mercado de engenharia de dados. |
 | 3 | **Definir o projeto de portfólio de engenharia de dados** (1h de planejamento) | Até 31/10 | Escolher o dataset público e o escopo agora deixa novembro livre só para construir (veja a seção 6). |
-| 4 | **Garantir lugar no DevFest São Paulo 2026 (GDG Cloud SP)** | Evento em 28/11 | Melhor evento presencial de IA e cloud em SP no trimestre, na FIAP Paulista. Cai num sábado, 2 dias antes da P2 de 30/11, então vá só se a revisão estiver em dia. |
+| 4 | **Fazer o EF SET** (teste de inglês gratuito, 50 minutos, em efset.org) | Depois da P1 (20 a 26/10) | Comprova seu nível de inglês para vagas e mostra se vale investir em curso de conversação. |
 | 5 | **Decidir o orçamento do exame AWS CLF-C02** (cerca de US$ 100) | Até o fim de novembro | Para marcar a prova em janeiro, nas férias. **Preciso da sua confirmação de orçamento antes de tratar isso como prioridade** (veja a pergunta no fim do arquivo). |
 
 ---
@@ -36,6 +38,20 @@
 
 **Nota sobre a "certificação de SQL":** não existe certificação oficial "só de SQL" que seja gratuita. A sugestão é: (a) agora, o Kaggle Learn SQL (gratuito, sem prova) e o SQL que você já usa no Athena como portfólio; (b) em 2027, **DP-900** (barata, oficial) ou **1Z0-071** (SQL puro, mais cara). Me diga qual faz mais sentido para o seu orçamento.
 
+### Inglês
+
+| Teste | Custo | O que é | Quando vale | Link |
+|-------|-------|---------|-------------|------|
+| **EF SET** | **Gratuito** | 50 minutos (25 de leitura e 25 de áudio), adaptativo, nota de 0 a 100 no padrão A1 a C2. Gera link de certificado para o LinkedIn. **Não avalia fala nem escrita.** | **Agora.** Basta para filtro de currículo em vagas de dados. Não substitui TOEFL ou IELTS quando a empresa exige certificado formal. | [EF SET](https://www.ef.com/wwpt/certificados-ingles/efset/certificado-ingles/) |
+| **TOEIC Listening & Reading** | R$ 530 a R$ 590 segundo blogs (**não confirmado** em fonte oficial) | Exame mais usado pelo RH corporativo. Validade de 2 anos. | Só se um processo seletivo pedir. | [Universidade do Intercâmbio](https://www.universidadedointercambio.com/toeic-como-funciona-teste-proficiencia-ingles/) |
+| **Duolingo English Test** | Cerca de US$ 70 (blog de abril de 2026, **não confirmado**) | Feito em casa. | Só para intercâmbio ou mestrado fora, se a universidade aceitar. | [Soraya Quirino](https://sorayaquirino.com/qual-o-preco-do-duolingo-english-test/) |
+| **TOEFL iBT** | US$ 220 a 265 segundo blogs (**não confirmado**) | Exigido por muitas universidades no exterior. | Só para estudar fora. | [Segurospromo](https://www.segurospromo.com.br/blog/entenda-como-funciona-o-toefl/) |
+| **Cambridge (B2 First ou C1 Advanced)** | **Não confirmado** (não pesquisei o preço) | Certificado que não expira. | Se quiser algo permanente no currículo. | Sem link confirmado |
+
+**Desconto na UFABC:** a Agência de Relações Internacionais já publicou edital de **isenção do TOEFL iBT** para a graduação, por desempenho acadêmico, e de **TOEFL ITP gratuito** (esse, o que achei, só para pós-graduação). **Não encontrei edital de 2026 aberto.** Acompanhe [ri.ufabc.edu.br](https://ri.ufabc.edu.br/) e pergunte à ARI se há previsão para 2027. Mesmo com isenção, a inscrição na ETS é por sua conta ([isenção TOEFL iBT](https://ri.ufabc.edu.br/arquivo/isencao-aplicacao-toeflibt) · [edital TOEFL ITP pós](https://ri.ufabc.edu.br/mobilidade-academica/editais/edital-toefl-itp-remoto-para-a-pos-graduacao)).
+
+**Recomendação:** nenhum teste pago por enquanto. Se uma vaga pedir, TOEIC.
+
 ---
 
 ## 3. Cursos gratuitos e bolsas
@@ -48,6 +64,15 @@
 | **Fundamentos de Inteligência Artificial (Turma 3)** | IFSULDEMINAS, Campus Inconfidentes (instituto federal) | **Gratuito**, com certificado (mínimo de 60%) | **40h em 4 semanas, ou cerca de 10h por semana** | **Inscrições de 05/10 a 18/10/2026**. Aulas de 19/10 a 15/11. As vagas variam entre 250 e 1.000 por turma: as fontes divergem e o número está **não confirmado**. | Certificado de instituição pública. **Atenção:** o ritmo de 10h por semana coincide com as suas provas de 19/10 e 30/10. Conteúdo introdutório: baixa prioridade. | Portal de extensão: portal.ifs.ifsuldeminas.edu.br (edital nº 50/2026). Link direto **não confirmado**. [Notícia](https://www.horabrasil.com.br/2026/09/20/ifsuldeminas-curso-gratuito-inteligencia-artificial) |
 | **Google Skills Arcade (temporada 2026, jogos de outubro)** | Google Cloud | **Gratuito**, com prêmios físicos por tiers enquanto houver estoque | 1 a 2h por semana, no seu ritmo | Temporada contínua em 2026. Os jogos de outubro são *ML APIs*, *Language, Voice & Multimodal* e *Containers & Load Balancing*. | Prática hands-on em GCP com badges públicos. Bom complemento leve, sem prova. | [Anúncio oficial (fórum Google)](https://discuss.google.dev/t/infocus-this-week-google-skills-arcade-october-2026/402706) |
 | **Databricks Learning Festival (Ásia-Pacífico, virtual)** | Databricks Academy | **Gratuito**. Concluir uma trilha dá voucher de **50% numa certificação Databricks** | Uma trilha completa leva de 6 a 10h | Evento em 21 e 22/10/2026. **Não sei se aceita participantes do Brasil**: é regional e não confirmei. | Pode reduzir o custo do Data Analyst ou Data Engineer Associate em 2027. **Baixa prioridade**: cai entre as suas duas provas. | [Eventos Databricks](https://community.databricks.com/t5/learning-events/eb-p/databricks-community-events) |
+| **Kaggle Learn: Intro to SQL, Pandas, Python, Data Visualization** | Kaggle | **Gratuito**, com certificado para compartilhar | Poucas horas por curso (**total não confirmado**) | Sem prazo. A lista muda: confira o que existe. | Práticas curtas, ficam no seu perfil e combinam com o SQL que você já usa. O de SQL usa BigQuery. | [kaggle.com/learn](https://www.kaggle.com/learn) · [KDnuggets](https://www.kdnuggets.com/7-free-kaggle-micro-courses-for-data-science-beginners) |
+| **Fundamentos de Engenharia de Dados** | Data Science Academy | **Gratuito**, em português, com certificado de conclusão | **Não confirmada** (capítulos liberados semanalmente) | Não confirmado | Engenharia de dados com Python, qualidade de dados e DevOps. Confirme se está com turma aberta. | [Anúncio](https://blog.dsacademy.com.br/novo-curso-gratuito-fundamentos-de-engenharia-de-dados/) |
+| **Banco de Dados para Data Science** | SENAI | Gratuito (segundo a notícia de maio de 2026) | 40h | Não confirmado | SQL e bancos relacionais. **Não achei se dá certificado.** | [Casa do Dev](https://casado.dev/cursos/curso-gratuito-de-banco-de-dados-para-data-science-no-senai) |
+| **Data Engineering Zoomcamp** | DataTalks.Club | **Gratuito** | 9 semanas segundo o repositório. A carga semanal de 8 a 10h é **estimativa minha**. | Turma ao vivo prevista para **janeiro de 2027** (data exata **não confirmada**). **Só a turma ao vivo dá certificado**; depois o material fica aberto. | O curso gratuito mais completo para a sua meta: Docker, SQL, pipelines e cloud, com projeto final para o portfólio. **Fazer depois da prova AWS.** | [Repositório](https://github.com/datatalksclub/data-engineering-zoomcamp) |
+| **CS50 SQL (Introduction to Databases with SQL)** | Harvard (CS50) | Assistir é gratuito. O certificado verificado no Harvard Online custa **US$ 299**. Se o certificado gratuito do próprio CS50 existe, **não confirmei**. | 7 listas de exercícios e 1 projeto final (**horas não confirmadas**) | Sem prazo | Projeto final de banco de dados que vai para o GitHub. Bom para 2027, após a AWS. | [cs50.harvard.edu/sql](https://cs50.harvard.edu/sql/2024/project/) · [Harvard Online](https://www.harvardonline.harvard.edu/course/cs50s-introduction-databases-sql) |
+| **Machine Learning Specialization** | DeepLearning.AI e Stanford (Andrew Ng), na Coursera | Gratuito como ouvinte. Certificado pago, cerca de US$ 49 segundo agregador (**não confirmado**). | 5 a 10h por semana por cerca de 3 meses (fontes de terceiros) | Sem prazo | Boa base de IA aplicada, mas **não cabe agora**. Deixar para 2027. | [Resumo](https://aiagentrank.io/learn/course/coursera-andrew-ng-ml-specialization) |
+| **freeCodeCamp: Relational Database / Data Analysis with Python** | freeCodeCamp | **Gratuito**, com certificado e projetos | Cerca de 300h por certificação (segundo o guia oficial). **Estado atual do catálogo não confirmado.** | Sem prazo | Certificado com projetos. Escolher só um, em 2027. | [freeCodeCamp](https://www.freecodecamp.org/news/freecodecamp-certifications/) |
+| **Stanford Code in Place (como Section Leader, 2027)** | Stanford | **Gratuito** e voluntário (sem pagamento) | 2 a 3h por semana entre abril e junho | Em 2026 as inscrições de monitor foram até 07/04 e as de aluno até 08/04. **Datas de 2027 não anunciadas.** | Monitor do programa dá aula em inglês e pesa mais no currículo do que o certificado de aluno. Como aluno o ganho é pequeno: o conteúdo é Python introdutório. Não confirmei se é preciso ter sido aluno antes. | [Digital Jersey](https://www.digital.je/news-events/digital-events/code-in-place-application-drop-in-session/) · [Reddit](https://reddit.sentinel-team.org/posts/1reqqk8/snapshots/2026-02-26T07%3A46%3A07.28057Z) |
+| **Santander Fala Mundo (próxima edição)** | Santander Open Academy, com a Immerse | **Gratuito** | 1 a 3 meses | A 3ª edição de 2026 **encerrou em 14/09**. Próxima edição **não anunciada**. | Curso de conversação em inglês, o que o EF SET não avalia. É certificado de conclusão, não de proficiência. | [Página da 3ª edição](https://app.santanderopenacademy.com/pt-BR/program/santander-fala-mundo-2026-3-edicao) |
 | **Escola Virtual Fundação Bradesco** | Fundação Bradesco | **Gratuito**, com certificado (mínimo de 70% de aproveitamento) | 15h ou mais por curso, com 60 dias para concluir | Catálogo permanente | Tem trilha de banco de dados e Power BI. **Não confirmei** se há um curso específico de SQL no catálogo atual. | [ev.org.br](https://www.ev.org.br/) |
 
 ---
@@ -59,6 +84,10 @@
 | **PayPal AI Hackathon** | Envio até **12/11/2026, 12h PST** | Online (Devpost) | **US$ 67.500** em dinheiro | Livre: construir com PayPal e IA, sem trilhas fixas | **Não confirmado** (Devpost costuma aceitar equipes) | [Devpost](https://paypalaihackathon.devpost.com/) |
 | **Nebius x NVIDIA Global AI Hackathon 2026** | Envio até **30/10/2026, 10h PT**. Julgamento de 01 a 15/12 | Online (Devpost) | **Não confirmado**: as fontes vão de US$ 20 mil para o 1º lugar até "US$ 50 mil ou mais" no total | Apps de IA na Nebius Token Factory ou AI Cloud usando modelo aberto da NVIDIA (ex.: Nemotron) | Sim, segundo fontes secundárias (individual ou em equipe, sem limite confirmado) | Página Devpost **não confirmada**: [busca no Devpost](https://devpost.com/hackathons?search=nebius) · [Resumo](https://www.startupgrantsindia.com/nebius-nvidia-global-ai-hackathon) |
 | **Kaggle Playground Series (temporada 6)** | Episódios mensais. O S6E9 rodou de 01 a 30/09/2026. **O episódio de outubro e novembro não foi confirmado.** | Online | Brindes do Kaggle (prêmio não confirmado) | Tabular: classificação e regressão | Kaggle permite equipes (limite **não confirmado**) | [Kaggle Playground](https://www.kaggle.com/competitions?hostSegmentIdFilter=8) |
+| **OpenCV AI Competition 2026** (AWS) | Envio até **27/10/2026** | Online (Devpost) | **Não confirmado** | IA e visão computacional | **Não confirmado** | [Devpost IA](https://devpost.com/c/artificial-intelligence) |
+| **Boom: Break Our Model** (USP e Itaú) | **06/11/2026**. Inscrições até 22/10. **O ano da página não está confirmado**: pode ser da edição de 2025. | Presencial, Poli-USP, São Paulo | Não confirmado | Desafio de 50 minutos para fazer um modelo de IA errar. Não gera projeto de portfólio. | Não confirmado | [Jornal da USP](https://jornal.usp.br/universidade/hackathon-desafia-estudantes-a-encontrar-falhas-em-modelos-de-inteligencia-artificial/) |
+
+**Onde acompanhar novos hackathons:** a [lista de IA da Devpost](https://devpost.com/c/artificial-intelligence) (atualizada toda semana) e [events.mlh.com](https://events.mlh.com/) (a temporada nova do MLH ainda não apareceu nas buscas).
 
 **Leitura honesta:** não encontrei nenhum hackathon presencial de dados em SP ou no ABC com inscrições abertas e data confirmada no período. Os dois online acima encostam nas suas provas: o Nebius vai até 30/10, dia da Avaliação 1 de Bioquímica, e o PayPal até 12/11. Recomendo **o PayPal**, só se tiver dupla e usando a semana de 01 a 11/11, que está livre de provas. O Kaggle Playground é a opção sem pressão para gerar notebooks de portfólio.
 
@@ -86,7 +115,7 @@
 
 ### Outubro: só o essencial, porque há provas em 19/10 e 30/10 (cerca de 2 a 3h por semana)
 - **Até 18/10:** **focar na P1**. Nada de estudo extra.
-- **20 a 26/10:** Databricks Fundamentals (1,5h) e 1h para escolher o dataset e o escopo do projeto.
+- **20 a 26/10:** Databricks Fundamentals (1,5h), **EF SET (1h)** e 1h para escolher o dataset e o escopo do projeto.
 - **27 a 30/10:** pausa total para a Avaliação 1 de Bioquímica.
 
 ### Novembro: janela livre, o mês de produzir (cerca de 5 a 6h por semana)
@@ -106,6 +135,13 @@
 - Atualizar o LinkedIn com o badge AWS, o badge Databricks e o projeto no GitHub.
 - Na próxima curadoria, avaliar o caminho para 2027: **DP-900 ou PL-300** (Microsoft) e **Data Analyst Associate** (Databricks).
 
+### Depois de janeiro de 2027 (planejamento, a rever na próxima curadoria)
+- **Janeiro, logo após a prova AWS:** **Data Engineering Zoomcamp** (turma ao vivo, prevista para janeiro, data não confirmada).
+- **Dezembro, a partir de 17/12, se sobrar tempo:** Kaggle Learn SQL e Pandas como aquecimento.
+- **Fevereiro e março:** acompanhar as inscrições do **Code in Place** (monitor) e a próxima edição do **Santander Fala Mundo**.
+- **Primeiro semestre:** uma segunda certificação (DP-900, PL-300 ou Databricks Data Engineer Associate) e **CS50 SQL**.
+- **Segundo semestre ou depois:** Machine Learning Specialization e freeCodeCamp.
+
 ---
 
 ## Itens analisados e descartados (para não reaparecerem)
@@ -123,6 +159,9 @@
 | ARC Prize 2026 (Kaggle) | Nível de pesquisa: retorno baixo para o seu momento. |
 | Hackathon Sintechtica (Ânima) | Restrito ao ecossistema Ânima. Inscrições até 27/09. |
 | Data Engineer's Conference (Microsoft Reactor) e São Paulo Big Data Meetup | Página sem o ano: não dá para confirmar que é de 2026. |
+| SuperGeeks | Rede de escolas de programação e robótica para crianças e adolescentes. Preço para alunos e avaliações independentes não encontrados. Abaixo do seu nível e sem certificação reconhecida. |
+| Stanford Code in Place como aluno | Python introdutório: ganho pequeno para quem já tem técnico e usa SQL e Python. Fica só como Section Leader em 2027. |
+| Santander Fala Mundo, 3ª edição de 2026 | Inscrições encerradas em 14/09/2026 (veja a próxima edição na seção 3). |
 | Google Data Analytics (Coursera) | É pago (preço de 2026 não confirmado) e tem mais de 200h. Fica para o backlog, não para este trimestre. |
 
 ---
@@ -181,6 +220,32 @@ Todas consultadas em **13/10/2026**. Os sites oficiais foram lidos via mecanismo
 - https://bccufabc.com/
 - https://codaufabc.com/
 - https://www.ufabc.edu.br/eventos
+
+- https://www.kaggle.com/learn
+- https://www.kdnuggets.com/7-free-kaggle-micro-courses-for-data-science-beginners
+- https://blog.dsacademy.com.br/novo-curso-gratuito-fundamentos-de-engenharia-de-dados/
+- https://casado.dev/cursos/curso-gratuito-de-banco-de-dados-para-data-science-no-senai
+- https://github.com/datatalksclub/data-engineering-zoomcamp
+- https://www.harvardonline.harvard.edu/course/cs50s-introduction-databases-sql
+- https://cs50.harvard.edu/sql/2024/project/
+- https://aiagentrank.io/learn/course/coursera-andrew-ng-ml-specialization
+- https://www.freecodecamp.org/news/freecodecamp-certifications/
+- https://www.digital.je/news-events/digital-events/code-in-place-application-drop-in-session/
+- https://reddit.sentinel-team.org/posts/1reqqk8/snapshots/2026-02-26T07%3A46%3A07.28057Z
+- https://app.santanderopenacademy.com/pt-BR/program/santander-fala-mundo-2026-3-edicao
+- https://www.f5cariri.com.br/2026/09/santander-open-academy-abre-10-mil.html
+- https://www.ef.com/wwpt/certificados-ingles/efset/certificado-ingles/
+- https://www.lagaceta.com.ar/nota/1146584/educacion/como-conseguir-certificado-gratuito-ingles-para-sumar-tu-cv-linkedin.html
+- https://www.universidadedointercambio.com/toeic-como-funciona-teste-proficiencia-ingles/
+- https://sorayaquirino.com/qual-o-preco-do-duolingo-english-test/
+- https://www.segurospromo.com.br/blog/entenda-como-funciona-o-toefl/
+- https://ri.ufabc.edu.br/arquivo/isencao-aplicacao-toeflibt
+- https://ri.ufabc.edu.br/mobilidade-academica/editais/edital-toefl-itp-remoto-para-a-pos-graduacao
+- https://supergeeks.com.br/
+- https://franquias.supergeeks.com.br/
+- https://devpost.com/c/artificial-intelligence
+- https://jornal.usp.br/universidade/hackathon-desafia-estudantes-a-encontrar-falhas-em-modelos-de-inteligencia-artificial/
+- https://events.mlh.com/
 
 ---
 
