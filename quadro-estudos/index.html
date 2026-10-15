@@ -538,15 +538,16 @@ function distribuirPrazos(dados, provaId, sobrescrever = false) {
    - Bioquímica: datas das avaliações estão no cronograma; o conteúdo
      de cada avaliação foi deduzido pela ordem do cronograma (tudo antes
      da 1ª avaliação cai na P1, o resto na P2).
-   - Programação Estruturada: o plano diz "Prova 1" na semana 4 e
-     "Prova 2" na semana 10, mas as datas estão "a definir" → ficam
-     vazias até você preencher em "Disciplinas".
+   - Programação Estruturada: o plano põe a "Prova 1" depois de recursão
+     e a "Prova 2" depois de listas encadeadas, com datas "a definir".
+     A P1 foi marcada para 03/11 (informado por você); a P2 segue vazia
+     até você preencher em "Disciplinas".
    - Algoritmos em Grafos: P1 em 29/10 (até a semana 06) e P2 em 01/12
      (conteúdo todo, principalmente depois da P1), segundo o site do
      professor. Ver adicionarGrafos().
    `aula` = data em que o tópico é dado; `peso` = tamanho relativo.
    ===================================================================== */
-const VERSAO_DADOS = 2; // aumente ao incluir conteúdo novo e trate em migrar()
+const VERSAO_DADOS = 3; // aumente ao incluir conteúdo novo e trate em migrar()
 
 /** Funções auxiliares para incluir disciplinas, provas e cards em D. */
 function construtor(D) {
@@ -655,7 +656,7 @@ function criarDadosIniciais() {
 
   // ----- Programação Estruturada (MCTA028-15) -----
   const pe = disciplina('Programação Estruturada', 'MCTA028-15', '#1F7AE0');
-  const peP1 = prova(pe, 'P1', null);
+  const peP1 = prova(pe, 'P1', '2026-11-03'); // data informada por você (o plano dizia "a definir")
   const peP2 = prova(pe, 'P2', null);
   prova(pe, 'Sub', null, true);
   prova(pe, 'Rec', null, true);
@@ -726,7 +727,8 @@ function adicionarGrafos(D) {
 }
 
 /* Atualiza dados salvos de versões anteriores sem apagar o progresso:
-   v1 → v2: inclui Algoritmos em Grafos e a prática de micropipetas. */
+   v1 → v2: inclui Algoritmos em Grafos e a prática de micropipetas.
+   v2 → v3: data da P1 de Programação Estruturada. */
 function migrar(d) {
   if ((d.versao || 1) < 2) {
     if (!d.disciplinas.some(x => /grafos/i.test(x.nome))) {
@@ -749,6 +751,14 @@ function migrar(d) {
       novo.prazo = lab.data ? minISO(maxISO(hojeISO(), somarDias(novo.aula, 2)), p1 && p1.prazo ? p1.prazo : somarDias(lab.data, -2)) : null;
     }
     d.versao = 2;
+  }
+  // v2 → v3: P1 de Programação Estruturada marcada para 03/11
+  // (só preenche se você ainda não tiver colocado uma data).
+  if (d.versao < 3) {
+    const prog = d.disciplinas.find(x => /programa/i.test(x.nome));
+    const p1 = prog && d.provas.find(p => p.disciplinaId === prog.id && p.nome === 'P1');
+    if (p1 && !p1.data) { p1.data = '2026-11-03'; distribuirPrazos(d, p1.id); }
+    d.versao = 3;
   }
   return d;
 }
