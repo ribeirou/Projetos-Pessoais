@@ -541,29 +541,40 @@ function distribuirPrazos(dados, provaId, sobrescrever = false) {
    - Programação Estruturada: o plano diz "Prova 1" na semana 4 e
      "Prova 2" na semana 10, mas as datas estão "a definir" → ficam
      vazias até você preencher em "Disciplinas".
+   - Algoritmos em Grafos: P1 em 29/10 (até a semana 06) e P2 em 01/12
+     (conteúdo todo, principalmente depois da P1), segundo o site do
+     professor. Ver adicionarGrafos().
    `aula` = data em que o tópico é dado; `peso` = tamanho relativo.
    ===================================================================== */
-function criarDadosIniciais() {
-  const D = { versao: 1, disciplinas: [], provas: [], cards: [] };
-  let ordem = 0;
+const VERSAO_DADOS = 2; // aumente ao incluir conteúdo novo e trate em migrar()
 
-  function disciplina(nome, codigo, cor) {
-    const d = { id: uid(), nome, codigo, cor };
-    D.disciplinas.push(d);
-    return d.id;
-  }
-  function prova(discId, nome, data, condicional = false) {
-    const p = { id: uid(), disciplinaId: discId, nome, data, condicional };
-    D.provas.push(p);
-    return p.id;
-  }
-  function card(discId, provaId, titulo, aula, peso, itens, notas = '') {
-    D.cards.push({
-      id: uid(), titulo, disciplinaId: discId, provaId, coluna: 'estudar',
-      prazo: null, aula, peso, notas, ordem: ordem++,
-      checklist: itens.map(t => ({ id: uid(), texto: t, feito: false })),
-    });
-  }
+/** Funções auxiliares para incluir disciplinas, provas e cards em D. */
+function construtor(D) {
+  let ordem = D.cards.reduce((m, c) => Math.max(m, c.ordem), -1) + 1;
+  return {
+    disciplina(nome, codigo, cor) {
+      const d = { id: uid(), nome, codigo, cor };
+      D.disciplinas.push(d);
+      return d.id;
+    },
+    prova(discId, nome, data, condicional = false) {
+      const p = { id: uid(), disciplinaId: discId, nome, data, condicional };
+      D.provas.push(p);
+      return p.id;
+    },
+    card(discId, provaId, titulo, aula, peso, itens, notas = '') {
+      D.cards.push({
+        id: uid(), titulo, disciplinaId: discId, provaId, coluna: 'estudar',
+        prazo: null, aula, peso, notas, ordem: ordem++,
+        checklist: itens.map(t => ({ id: uid(), texto: t, feito: false })),
+      });
+    },
+  };
+}
+
+function criarDadosIniciais() {
+  const D = { versao: VERSAO_DADOS, disciplinas: [], provas: [], cards: [] };
+  const { disciplina, prova, card } = construtor(D);
 
   // ----- Física Quântica (BCK0103-15) -----
   const fq = disciplina('Física Quântica', 'BCK0103-15', '#6C4CF0');
@@ -668,9 +679,78 @@ function criarDadosIniciais() {
   card(pe, peP2, 'Listas encadeadas', null, 1.5,
     ['Estrutura do nó', 'Inserção e remoção', 'Percorrer e liberar a lista'], 'Semana 9. P2 vale 60%.' + nProg);
 
+  adicionarGrafos(D);
+
   // Aplica a distribuição de prazos para todas as provas com data
   D.provas.forEach(p => distribuirPrazos(D, p.id));
   return D;
+}
+
+/* ----- Algoritmos em Grafos -----
+   O site dá só a SEMANA de cada aula. Semana 1 começa em 14/09, então a
+   semana N começa em 14/09 + 7·(N−1). Como data da aula usamos a quinta
+   da semana (estimativa conservadora), exceto na semana 07, em que a
+   quinta (29/10) é o dia da P1 e os digrafos devem ser dados antes. */
+function adicionarGrafos(D) {
+  const { disciplina, prova, card } = construtor(D);
+  const gr = disciplina('Algoritmos em Grafos', '', '#E07A1F');
+  const grP1 = prova(gr, 'P1', '2026-10-29');
+  const grP2 = prova(gr, 'P2', '2026-12-01');
+  prova(gr, 'Sub', null, true);
+  prova(gr, 'Avaliação recuperativa', null, true);
+  const nG = ' Prova individual, presencial e sem consulta: escreva soluções claras e discursivas (pode usar lápis). Leitura: notas de aula.';
+  const nP1 = ' Cai na P1 (29/10, até a semana 06).' + nG;
+  const nP2 = ' Cai na P2 (01/12), que tem peso maior.' + nG;
+  card(gr, grP1, 'Fundamentos: terminologia básica de grafos', '2026-09-17', 1,
+    ['Grafos, adjacência e grau', 'Subgrafos', 'Passeios, trilhas e caminhos', 'Circuitos e ciclos', 'Lista 1'], 'Semana 01.' + nP1);
+  card(gr, grP1, 'Representação: isomorfismo, matriz e lista de adjacência', '2026-10-01', 1,
+    ['Isomorfismo', 'Matriz de adjacência', 'Lista de adjacência', 'Noções de análise de algoritmos', 'Buscas'], 'Semana 03.' + nP1);
+  card(gr, grP1, 'Busca em largura (BFS) e em profundidade (DFS)', '2026-10-08', 1.2,
+    ['BFS', 'DFS', 'Caminhos mínimos em grafos não ponderados', 'Lista 2'], 'Semana 04.' + nP1);
+  card(gr, grP1, 'Árvores geradoras mínimas: Prim e Kruskal', '2026-10-15', 1.2,
+    ['Árvores e florestas', 'Grafos ponderados e árvores geradoras', 'Corte', 'Algoritmo de Prim', 'Algoritmo de Kruskal', 'Lista 3'], 'Semana 05.' + nP1);
+  card(gr, grP1, 'Grafos eulerianos, hamiltonianos e TSP', '2026-10-22', 1,
+    ['Trilhas e ciclos eulerianos', 'Caminhos e circuitos hamiltonianos', 'Problema do caixeiro-viajante (TSP)'], 'Semana 06.' + nP1);
+  card(gr, grP2, 'Digrafos, DAGs, ordenação topológica e componentes fortemente conexas', '2026-10-27', 1.2,
+    ['Graus de entrada e saída', 'DAGs', 'Ordenação topológica', 'Componentes fortemente conexas', 'Lista 4'], 'Semana 07.' + nP2);
+  card(gr, grP2, 'Caminhos mínimos em digrafos: Dijkstra', '2026-11-05', 1.2,
+    ['Problema dos caminhos mínimos', 'Relaxação', 'Propriedades de caminhos mínimos', 'Algoritmo de Dijkstra (pesos não negativos)', 'Lista 5'], 'Semana 08.' + nP2);
+  card(gr, grP2, 'Caminhos mínimos II: pesos negativos e Floyd-Warshall', '2026-11-12', 1.2,
+    ['Pesos e ciclos negativos', 'Caminhos mínimos de uma origem', 'Caminhos mínimos entre todos os pares', 'Algoritmo de Floyd-Warshall'], 'Semana 09.' + nP2);
+  card(gr, grP2, 'Fluxo máximo: redes, cortes e caminhos aumentantes', '2026-11-19', 1,
+    ['Redes de fluxo e capacidades', 'Conservação de fluxo', 'Fluxos e cortes', 'Caminhos aumentantes', 'Lista 6'], 'Semana 10.' + nP2);
+  card(gr, grP2, 'Ford-Fulkerson e teorema fluxo máximo / corte mínimo', '2026-11-26', 1,
+    ['Algoritmo de Ford-Fulkerson', 'Fluxo máximo e corte mínimo'], 'Semana 11.' + nP2);
+  card(gr, grP2, 'Revisão da matéria da P1 para a P2', null, 0.7,
+    ['Refazer listas 1 a 3'], 'A P2 cobre o conteúdo todo, principalmente o que vem depois da P1. Reserve um tempo para revisar a matéria da P1.');
+}
+
+/* Atualiza dados salvos de versões anteriores sem apagar o progresso:
+   v1 → v2: inclui Algoritmos em Grafos e a prática de micropipetas. */
+function migrar(d) {
+  if ((d.versao || 1) < 2) {
+    if (!d.disciplinas.some(x => /grafos/i.test(x.nome))) {
+      const antes = new Set(d.provas.map(p => p.id));
+      adicionarGrafos(d);
+      d.provas.filter(p => !antes.has(p.id)).forEach(p => distribuirPrazos(d, p.id));
+    }
+    const bio = d.disciplinas.find(x => /bioqu/i.test(x.nome));
+    const lab = bio && d.provas.find(p => p.disciplinaId === bio.id && /laborat/i.test(p.nome));
+    if (lab && !d.cards.some(c => /micropipeta/i.test(c.titulo))) {
+      const p1 = d.cards.find(c => /^Prática 1/.test(c.titulo));
+      d.cards.push({
+        id: uid(), titulo: 'Prática introdutória: uso de micropipetas', disciplinaId: bio.id, provaId: lab.id,
+        coluna: 'estudar', prazo: null, aula: '2026-09-16', peso: 0.5, ordem: p1 ? p1.ordem - 0.5 : 0,
+        notas: 'Prática de 16/09 (1ª aula de laboratório). Cai na avaliação de laboratório (02/12).',
+        checklist: ['Tipos de micropipeta e volumes', 'Técnica de pipetagem'].map(t => ({ id: uid(), texto: t, feito: false })),
+      });
+      // Encaixa o card novo antes da Prática 1 sem mexer nos prazos já existentes
+      const novo = d.cards[d.cards.length - 1];
+      novo.prazo = lab.data ? minISO(maxISO(hojeISO(), somarDias(novo.aula, 2)), p1 && p1.prazo ? p1.prazo : somarDias(lab.data, -2)) : null;
+    }
+    d.versao = 2;
+  }
+  return d;
 }
 
 // ---------- Estado e persistência ----------
@@ -682,7 +762,7 @@ function gravar(chave, valor) { try { localStorage.setItem(chave, typeof valor =
 
 function carregar() {
   const salvo = lerJSON(CHAVE_DADOS);
-  return dadosValidos(salvo) ? salvo : criarDadosIniciais();
+  return dadosValidos(salvo) ? migrar(salvo) : criarDadosIniciais();
 }
 function salvar() { gravar(CHAVE_DADOS, dados); }
 function salvarPrefs() { gravar('quadroEstudos.prefs', prefs); }
@@ -1165,7 +1245,7 @@ $('#bk-importar').addEventListener('click', async () => {
     c.ordem = typeof c.ordem === 'number' ? c.ordem : i;
     if (!COLUNAS.some(k => k.id === c.coluna)) c.coluna = 'estudar';
   });
-  dados = novo;
+  dados = migrar(novo);
   salvar();
   $('#dlg-backup').close();
   render();
